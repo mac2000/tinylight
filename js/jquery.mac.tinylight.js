@@ -1,5 +1,5 @@
 (function ($, undefined) {
-    $.widget('mac.wysiwyg', {
+    $.widget('mac.tinylight', {
         wasLength:0,
         nowLength:0,
         holder:undefined,
@@ -126,7 +126,7 @@
         },
         _addButton:function (command) {
             var self = this;
-            var button = $('<span class="mac-wysiwyg-toolbar-button" data-command="' + command + '" unselectable="on">' + command + '</span>').appendTo(self.toolbar);
+            var button = $('<span class="mac-tinylight-toolbar-button" data-command="' + command + '" unselectable="on">' + command + '</span>').appendTo(self.toolbar);
             button.on('mousedown', function (e) { // must be mousedown, not click, otherwise it will not work in Firefox, because before click, text in edit area is unselected
                 e.preventDefault();
                 self.doc.execCommand(command);
@@ -141,8 +141,8 @@
                 $.each(self.buttons, function (index, button) {
                     var command = button.data('command');
                     var enabled = self.doc.queryCommandEnabled(command);
-                    button.toggleClass('mac-wysiwyg-toolbar-button__active', self.doc.queryCommandState(command));
-                    button.toggleClass('mac-wysiwyg-toolbar-button__disabled', !enabled);
+                    button.toggleClass('mac-tinylight-toolbar-button__active', self.doc.queryCommandState(command));
+                    button.toggleClass('mac-tinylight-toolbar-button__disabled', !enabled);
 
                     if (enabled) button.removeAttr('disabled');
                     else button.attr('disabled', 'disabled');
@@ -155,10 +155,10 @@
             self.element.hide();
 
             // Create elements
-            self.holder = $('<div class="mac-wysiwyg">').insertBefore(self.element).hide();
+            self.holder = $('<div class="mac-tinylight">').insertBefore(self.element).hide();
             self.holder.height(self.options.height);
-            self.frame = $('<iframe class="mac-wysiwyg-frame" frameborder="0" dir="ltr" wrap="soft">').appendTo(self.holder);
-            self.toolbar = $('<div class="mac-wysiwyg-toolbar" unselectable="on">').appendTo(self.holder);
+            self.frame = $('<iframe class="mac-tinylight-frame" frameborder="0" dir="ltr" wrap="soft">').appendTo(self.holder);
+            self.toolbar = $('<div class="mac-tinylight-toolbar" unselectable="on">').appendTo(self.holder);
 
             // Create toolbar buttons
             var buttons = ['Bold', 'Italic', 'Underline', 'InsertUnorderedList', 'InsertOrderedList'];

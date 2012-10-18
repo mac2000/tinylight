@@ -7,11 +7,11 @@ $max-button-height:20px;
 $max-button-width:20px;
 $buttons-margin:1px;
 
-.mac-wysiwyg {
+.mac-tinylight {
   position: relative;
   border: 1px solid $border-color;
 
-  .mac-wysiwyg-toolbar {
+  .mac-tinylight-toolbar {
     background-color: #f7f7f7;
     border-bottom: 1px solid $border-color;
     position: absolute;
@@ -29,14 +29,14 @@ $buttons-margin:1px;
       @if $max-button-width < image-width("#{$button}.png") {
         $max-button-width: image-width("#{$button}.png");
       }
-      .mac-wysiwyg-toolbar-button[data-command='#{$button}'] {
+      .mac-tinylight-toolbar-button[data-command='#{$button}'] {
         background-image: inline-image("#{$button}.png");
         width:image-width("#{$button}.png");
         height:image-height("#{$button}.png");
       }
     }
 
-    .mac-wysiwyg-toolbar-button {
+    .mac-tinylight-toolbar-button {
       margin:0;
       padding:0;
       @include float-left;
@@ -51,12 +51,12 @@ $buttons-margin:1px;
       margin:$buttons-margin;
       @include hide-text;
     }
-    .mac-wysiwyg-toolbar-button:hover,
-    .mac-wysiwyg-toolbar-button__active {
+    .mac-tinylight-toolbar-button:hover,
+    .mac-tinylight-toolbar-button__active {
       background-color:#ddd;
     }
-    .mac-wysiwyg-toolbar-button__disabled,
-    .mac-wysiwyg-toolbar-button__disabled:hover {
+    .mac-tinylight-toolbar-button__disabled,
+    .mac-tinylight-toolbar-button__disabled:hover {
       background-color:transparent;
       @include opacity(0.5);
     }
@@ -64,7 +64,7 @@ $buttons-margin:1px;
     height: $max-button-height + 2 * $buttons-margin;
   }
 
-  .mac-wysiwyg-frame {
+  .mac-tinylight-frame {
     width:100%;
     background:white;
     border: none;
