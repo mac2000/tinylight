@@ -16,13 +16,70 @@
             backgroundColor:'white'
         },
         cleanupHtml:function(html){
-            //TODO: grab from fresh tinymce
-
-            // Regex cleanup
-            //html = html.replace(/<div>/gi, '').replace(/<\/div>/gi, '<br>');
-
-            // DOM cleanup
             var el = $('<div>').html(html);
+            $('*:empty:not(br)', el).remove(); // remove empty nodes
+            $('*').filter(function(){ return this.nodeType == 3 && /\s+/.test(this.nodeValue); }).remove(); // remove empty text nodes
+
+            // Word lists
+            var list_items = $('p', el).filter(function(index, item){
+                return /mso-list/gi.test($(item).attr('style'));
+            });
+            $.each(list_items, function(index, item){
+                var tagName = /^[0-9a-np-z]/i.test($.trim($(item).text())) ? 'ol' : 'ul';
+                $(item).html($(item).html().replace(/<!--\[if !supportLists\]-->.+<!--\[endif\]-->/gi, ''));
+                var content = $(item).find('span[lang]:first').size() > 0 ? $(item).find('span[lang]:first').html() : $(item).html();
+                $(item).replaceWith('<' + tagName + '><li>' + content + '</li></' + tagName + '>');
+            });
+            el.html(el.html().replace(/<\/(o|u)l>\s*<(o|u)l>/gi, ''));
+
+            // Nested lists
+            list_items = $('li', el).filter(function(index, item){
+                return $(item).find('ul, ol').size() > 0;
+            });
+            list_items.each(function(index, item){
+                var list = $(item).find('ul:first, ol:first');
+                $(list.html()).insertAfter(item);
+                list.remove();
+            });
+
+            // Replace long tags to short
+            $('strong', el).replaceWith(function(){
+                return '<b>' + $(this).html() + '</b>';
+            });
+            $('em', el).replaceWith(function(){
+                return '<i>' + $(this).html() + '</i>';
+            });
+            $('h1, h2, h3, h4, h5, h6', el).replaceWith(function(){
+                return '<p><b>' + $(this).html() + '</b></p>';
+            });
+
+            // Convert styled spans
+            $('span', el).each(function(index, item){
+                var start = '';
+                var end = '';
+
+                if($(item).css('font-weight') == 'bold') {
+                    start = '<b>';
+                    end = '</b>';
+                }
+                if($(item).css('font-style') == 'italic') {
+                    start += '<i>';
+                    end += '</i>';
+                }
+                if($(item).css('text-decoration') == 'underline') {
+                    start += '<u>';
+                    end += '</u>';
+                }
+                $(item).replaceWith(start + $(item).html() + end);
+            });
+
+            $('p, div', el).each(function(index, item){
+                $('<br>').insertAfter(item);
+                $(item).replaceWith($(item).html());
+            });
+
+            //jQuery('*:not(a, b, div)').remove() // remove not allowed tags
+
             el.contents().filter(function(){ return this.nodeType == 8; }).remove(); // remove comments
             html = el.html();
 
@@ -73,7 +130,7 @@
             self.element.hide();
 
             // Create elements
-            self.holder = $('<div class="mac-wysiwyg">').insertAfter(self.element).hide();
+            self.holder = $('<div class="mac-wysiwyg">').insertBefore(self.element).hide();
             self.holder.height(self.options.height);
             self.frame = $('<iframe class="mac-wysiwyg-frame" frameborder="0" dir="ltr" wrap="soft">').appendTo(self.holder);
             self.toolbar = $('<div class="mac-wysiwyg-toolbar" unselectable="on">').appendTo(self.holder);
