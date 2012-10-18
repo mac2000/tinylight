@@ -68,15 +68,15 @@
                 var start = '';
                 var end = '';
 
-                if($(item).css('font-weight') == 'bold') {
+                if(($(item).css('font-weight') == 'bold' || $(item).css('font-weight') == 700) && $(item).closest('b').size() == 0) {
                     start = '<b>';
                     end = '</b>';
                 }
-                if($(item).css('font-style') == 'italic') {
+                if($(item).css('font-style') == 'italic' && $(item).closest('i').size() == 0) {
                     start += '<i>';
                     end += '</i>';
                 }
-                if($(item).css('text-decoration') == 'underline') {
+                if($(item).css('text-decoration') == 'underline' && $(item).closest('u').size() == 0) {
                     start += '<u>';
                     end += '</u>';
                 }

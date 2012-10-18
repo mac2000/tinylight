@@ -5,8 +5,13 @@
 <link rel="stylesheet" href="css/jquery.mac.wysiwyg.css">
 <link rel="stylesheet" href="//code.jquery.com/qunit/qunit-1.10.0.css">
 <style>
-    .container-fluid {padding:20px;}
-    textarea {margin:20px 0;}
+    .container-fluid {
+        padding: 20px;
+    }
+
+    textarea {
+        margin: 20px 0;
+    }
 </style>
 <div class="container-fluid">
     <div class="row-fluid">
@@ -14,6 +19,7 @@
             <h3>TinyLight Demo</h3>
             <hr>
             <textarea class="span12" name="txt" id="txt" cols="30" rows="10">Hello World</textarea>
+
             <h3>Usage</h3>
             <hr>
             <pre><code>$('#txt').wysiwyg();</code></pre>
@@ -23,8 +29,6 @@
             <hr>
             <div id="qunit"></div>
         </div>
-
-
     </div>
 </div>
 <script src="//code.jquery.com/qunit/qunit-1.10.0.js"></script>
@@ -34,7 +38,7 @@
 <script src="js/jquery.mac.wysiwyg.js"></script>
 <script src="js/tests.js"></script>
 <script>
-    (function($, window, document, undefined){
+    (function ($, window, document, undefined) {
         window.txt = $('#txt').wysiwyg().show();
     })(jQuery, window, document);
 </script>

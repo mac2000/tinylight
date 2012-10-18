@@ -153,6 +153,14 @@ test('convert spans with styles to allowed tags', function () {
     equal(cleanupHtml('<span style="font-style:italic;text-decoration:underline">span</span>'), '<i><u>span</u></i>');
 });
 
+test('will not nest duplicate tags', function () {
+    equal(cleanupHtml('<b><span style="font-weight:bold">span</span></b>'), '<b>span</b>');
+    equal(cleanupHtml('<i><span style="font-style:italic">span</span></i>'), '<i>span</i>');
+    equal(cleanupHtml('<u><span style="text-decoration:underline">span</span></u>'), '<u>span</u>');
+    equal(cleanupHtml('<b><span style="font-weight:bold;font-style:italic">span</span></b>'), '<b><i>span</i></b>');
+    equal(cleanupHtml('<b><span style="font-weight:bold;text-decoration:underline">span</span></b>'), '<b><u>span</u></b>');
+});
+
 test('remove paragrahs and divs', function () {
     equal(cleanupHtml(HTML.DIV), CLEAN.DIV);
     equal(cleanupHtml(HTML.P), CLEAN.P);
