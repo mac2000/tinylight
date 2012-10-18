@@ -1,0 +1,75 @@
+@import "compass";
+@import "compass/css3/user-interface";
+
+$border-color: #999;
+
+$max-button-height:20px;
+$max-button-width:20px;
+$buttons-margin:1px;
+
+.mac-wysiwyg {
+  position: relative;
+  border: 1px solid $border-color;
+
+  .mac-wysiwyg-toolbar {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid $border-color;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    @include clearfix;
+    @include user-select(none);
+
+    @each $button in 'Bold', 'Italic', 'Underline', 'InsertUnorderedList', 'InsertOrderedList', 'Undo', 'Redo' {
+      @if $max-button-height < image-height("#{$button}.png") {
+        $max-button-height: image-height("#{$button}.png");
+      }
+      @if $max-button-width < image-width("#{$button}.png") {
+        $max-button-width: image-width("#{$button}.png");
+      }
+      .mac-wysiwyg-toolbar-button[data-command='#{$button}'] {
+        background-image: inline-image("#{$button}.png");
+        width:image-width("#{$button}.png");
+        height:image-height("#{$button}.png");
+      }
+    }
+
+    .mac-wysiwyg-toolbar-button {
+      margin:0;
+      padding:0;
+      @include float-left;
+      border:none;
+      background:none;
+      background-position:50% 50%;
+      background-repeat:no-repeat;
+      width:$max-button-width;
+      height:$max-button-height;
+      line-height:$max-button-height;
+      overflow:hidden;
+      margin:$buttons-margin;
+      @include hide-text;
+    }
+    .mac-wysiwyg-toolbar-button:hover,
+    .mac-wysiwyg-toolbar-button__active {
+      background-color:#ddd;
+    }
+    .mac-wysiwyg-toolbar-button__disabled,
+    .mac-wysiwyg-toolbar-button__disabled:hover {
+      background-color:transparent;
+      @include opacity(0.5);
+    }
+
+    height: $max-button-height + 2 * $buttons-margin;
+  }
+
+  .mac-wysiwyg-frame {
+    width:100%;
+    background:white;
+    border: none;
+    height:inherit;
+    padding-top:1 + $max-button-height + 2 * $buttons-margin;
+    @include box-sizing(border-box);
+  }
+}

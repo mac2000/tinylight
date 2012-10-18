@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<title>WYSIWYG</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/jquery.mac.wysiwyg.css">
+<textarea name="txt" id="txt" cols="30" rows="10">Hello World</textarea>
+<script src="//code.jquery.com/jquery-1.8.2.js"></script>
+<!-- actually we need only jquery.ui.widget.js -->
+<script src="//code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<script src="js/jquery.mac.wysiwyg.js"></script>
+<script>
+    (function($, window, document, undefined){
+        $('#txt').wysiwyg();
+    })(jQuery, window, document);
+</script>
