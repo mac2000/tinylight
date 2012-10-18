@@ -16,6 +16,12 @@
             backgroundColor:'white'
         },
         cleanupHtml:function(html){
+            html = html.replace(/&nbsp;/gi, ' ').replace(/\s+/g, ' ').replace(/[\t\r\n\n]+/g, '').replace(/>\s+</g, '><').replace(/<br\s*\/?>/gi, '<br>');
+
+            var strtr = '\u2122,<sup>TM</sup>,\u2026,...,\x93|\x94|\u201c|\u201d,",\x60|\x91|\x92|\u2018|\u2019,\',\u2013|\u2014|\u2015|\u2212,-'.split(',');
+            for (var i = 0; i < strtr.length; i += 2) html = html.replace(new RegExp(strtr[i], 'gi'), strtr[i + 1]);
+
+
             var el = $('<div>').html(html);
             $('*:empty:not(br)', el).remove(); // remove empty nodes
             $('*').filter(function(){ return this.nodeType == 3 && /\s+/.test(this.nodeValue); }).remove(); // remove empty text nodes
@@ -40,6 +46,10 @@
                 var list = $(item).find('ul:first, ol:first');
                 $(list.html()).insertAfter(item);
                 list.remove();
+            });
+            $('ul, ol', el).each(function(index, item){
+                var parent = $(item).parent()[0];
+                if(parent != el) $(parent).replaceWith($(parent).html());
             });
 
             // Replace long tags to short
@@ -75,13 +85,28 @@
 
             $('p, div', el).each(function(index, item){
                 $('<br>').insertAfter(item);
+                if(item.previousSibling && item.previousSibling.nodeType == 3 && !/\s+/.test(item.previousSibling.nodeValue)) {
+                    $('<br>').insertBefore(item);
+                }
                 $(item).replaceWith($(item).html());
             });
 
-            //jQuery('*:not(a, b, div)').remove() // remove not allowed tags
+            jQuery('*:not(b, i, u, ol, ul, li, br)', el).remove(); // remove not allowed tags
 
             el.contents().filter(function(){ return this.nodeType == 8; }).remove(); // remove comments
+
+            // Remove attributes
+            $('*', el).each(function(index, item){
+                var attributes = item.attributes;
+                var i = attributes.length;
+                while(i--) item.removeAttributeNode(attributes[i]);
+            });
+
             html = el.html();
+
+            html = html.replace(/<\/(b|i|u)>\s*<\1>/gi, ''); // Remove repeated tags like: <b>H</b><b>ello</b>
+
+            html = html.replace(/<br>\s*<br>\s*(<br>\s*)+/gi, '<br><br>');
 
             return html;
         },

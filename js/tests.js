@@ -124,6 +124,8 @@ module('Html lists');
 test('lists can not be nested', function () {
     equal(cleanupHtml('<ul><li>Item1<ul><li>Item1.1</li></ul></li></ul>'), '<ul><li>Item1</li><li>Item1.1</li></ul>');
     equal(cleanupHtml('<ol><li>Item1<ol><li>Item1.1</li></ol></li></ol>'), '<ol><li>Item1</li><li>Item1.1</li></ol>');
+    equal(cleanupHtml('<div><ul><li>Item</li></ul></div>'), '<ul><li>Item</li></ul>');
+    equal(cleanupHtml('<p><ul><li>Item</li></ul></p>'), '<ul><li>Item</li></ul>');
 });
 
 module('Html other');
@@ -154,4 +156,29 @@ test('convert spans with styles to allowed tags', function () {
 test('remove paragrahs and divs', function () {
     equal(cleanupHtml(HTML.DIV), CLEAN.DIV);
     equal(cleanupHtml(HTML.P), CLEAN.P);
+    equal(cleanupHtml(HTML.TXT + HTML.DIV), HTML.TXT + '<br>' + CLEAN.DIV);
+    equal(cleanupHtml(HTML.TXT + HTML.P), HTML.TXT + '<br>' + CLEAN.P);
+    equal(cleanupHtml(HTML.TXT + HTML.DIV + HTML.TXT), HTML.TXT + '<br>' + CLEAN.DIV + HTML.TXT);
+    equal(cleanupHtml(HTML.TXT + HTML.P + HTML.TXT), HTML.TXT + '<br>' + CLEAN.P + HTML.TXT);
+});
+
+test('remove not allowed tags', function () {
+    equal(cleanupHtml('<iframe></iframe>'), '');
+    equal(cleanupHtml('<script></script>'), '');
+    equal(cleanupHtml('<style></style>'), '');
+    equal(cleanupHtml('<img>'), '');
+    equal(cleanupHtml('<a></a>'), '');
+    equal(cleanupHtml('<table></table>'), '');
+});
+
+test('remove tag attributes', function () {
+    equal(cleanupHtml('<b style="font-size:12px">b</b>'), '<b>b</b>');
+    equal(cleanupHtml('<b class="loud" style="font-size:12px">b</b>'), '<b>b</b>');
+    equal(cleanupHtml('<b data-bind="text: name">b</b>'), '<b>b</b>');
+});
+
+test('combine repeated tags', function () {
+    equal(cleanupHtml('<b>H</b><b>ello</b>'), '<b>Hello</b>');
+    equal(cleanupHtml('<i>H</i><i>ello</i>'), '<i>Hello</i>');
+    equal(cleanupHtml('<u>H</u><u>ello</u>'), '<u>Hello</u>');
 });
