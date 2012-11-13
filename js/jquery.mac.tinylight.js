@@ -16,8 +16,15 @@
             backgroundColor:'white'
         },
         cleanupHtml:function(html){
+            // some basic replacements, we are:
+            // removing &nbsp;
+            // removing multiple spaces
+            // removing all non printable space charactes
+            // removing spaces between tags
+            // converting all <br> tags to same format
             html = html.replace(/&nbsp;/gi, ' ').replace(/\s+/g, ' ').replace(/[\t\r\n\n]+/g, '').replace(/>\s+</g, '><').replace(/<br\s*\/?>/gi, '<br>');
 
+            // strtr()
             var strtr = '\u2122,<sup>TM</sup>,\u2026,...,\x93|\x94|\u201c|\u201d,",\x60|\x91|\x92|\u2018|\u2019,\',\u2013|\u2014|\u2015|\u2212,-'.split(',');
             for (var i = 0; i < strtr.length; i += 2) html = html.replace(new RegExp(strtr[i], 'gi'), strtr[i + 1]);
 
