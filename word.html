@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <title>Word</title>
 <meta charset="utf-8">
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/latest/css/bootstrap-combined.min.css">
 <style>
     html, body, .container-fluid, .row-fluid, .span6, .well, textarea {
         height: 100%;
@@ -15,20 +15,34 @@
     .container-fluid {
         padding: 20px;
     }
+
+    button.btn {
+        position:absolute;
+        bottom:20px;
+        right:20px;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
 </style>
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span6">
-            <div id="from" class="well" contenteditable="true">Hello</div>
+            <div id="from" class="well" contenteditable="true">Paste text here and see whats have been actually pasted at right</div>
         </div>
         <div class="span6">
             <textarea id="to" class="span12"></textarea>
         </div>
     </div>
+    <button class="btn" onclick="one()" title="Updates will be turned off, so refresh page if you want to paste new text">Make one line for test case</button>
 </div>
 <script>
-    setInterval(function () {
+    var timer = setInterval(function () {
         document.getElementById('to').value = document.getElementById('from').innerHTML;
     }, 250);
+
+    function one() {
+        clearInterval(timer);
+        document.getElementById('to').value = "var given = '" + document.getElementById('to').value.replace(/[\r\n\n]/g, '').replace(/'/g, "\\'") + "';";
+    }
 </script>
 

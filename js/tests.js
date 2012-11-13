@@ -190,3 +190,12 @@ test('combine repeated tags', function () {
     equal(cleanupHtml('<i>H</i><i>ello</i>'), '<i>Hello</i>');
     equal(cleanupHtml('<u>H</u><u>ello</u>'), '<u>Hello</u>');
 });
+
+
+/* TEST CASE EXAMPLE
+test('<TEST CASE TITLE>', function () {
+    var given = '<b>H</b><b>ello</b>';
+    var expect = '<b>Hello</b>';
+    equal(cleanupHtml(given), expect);
+});
+*/
