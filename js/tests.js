@@ -25,8 +25,8 @@ var HTML = {
     TXT: 'Hello'
 };
 var CLEAN = {
-    P: 'p<br>',
-    DIV: 'd<br>'
+    P: '<p>p</p>',
+    DIV: '<p>d</p>'
 }
 module('Definitions');
 test('wysiwyg defined', function () {
@@ -39,93 +39,97 @@ test('cleanupHtml defined', function () {
 module('Cleanup');
 cleanupHtml = jQuery.mac.tinylight._proto.cleanupHtml;
 
+test('will wrap simple text with paragraphs', function () {
+    equal(cleanupHtml('Hello'), '<p>Hello</p>');
+});
+
 test('will not modify simple text', function () {
-    equal(cleanupHtml('Hello'), 'Hello');
+    equal(cleanupHtml('<p>Hello</p>'), '<p>Hello</p>');
 });
 test('will remove comments', function () {
-    equal(cleanupHtml('Hello <!-- World -->'), 'Hello ');
+    equal(cleanupHtml('Hello <!-- World -->'), '<p>Hello </p>');
 });
 
 module('Word OL lists');
 test('single item', function () {
-    var expected = '<ol><li>Item</li></ol>';
+    var expected = '<ol><li><p>Item</p></li></ol>';
     var given = WORD_2013.OL.ONE;
     equal(cleanupHtml(given), expected);
     equal(cleanupHtml(HTML.P + given), CLEAN.P + expected);
-    equal(cleanupHtml(HTML.TXT + given), HTML.TXT + expected);
+    equal(cleanupHtml(HTML.TXT + given), '<p>' + HTML.TXT + '</p>' + expected);
     equal(cleanupHtml(given + HTML.P), expected + CLEAN.P);
-    equal(cleanupHtml(given + HTML.TXT), expected + HTML.TXT);
+    equal(cleanupHtml(given + HTML.TXT), expected + '<p>' + HTML.TXT + '</p>');
     equal(cleanupHtml(HTML.P + given + HTML.P), CLEAN.P + expected + CLEAN.P);
-    equal(cleanupHtml(HTML.TXT + given + HTML.TXT), HTML.TXT + expected + HTML.TXT);
+    equal(cleanupHtml(HTML.TXT + given + HTML.TXT), '<p>' + HTML.TXT + '</p>' + expected + '<p>' + HTML.TXT + '</p>');
 });
 
 test('multiple items', function () {
-    var expected = '<ol><li>Item1</li><li>Item2</li></ol>';
+    var expected = '<ol><li><p>Item1</p></li><li><p>Item2</p></li></ol>';
     var given = WORD_2013.OL.TWO;
     equal(cleanupHtml(given), expected);
     equal(cleanupHtml(HTML.P + given), CLEAN.P + expected);
-    equal(cleanupHtml(HTML.TXT + given), HTML.TXT + expected);
+    equal(cleanupHtml(HTML.TXT + given), '<p>' + HTML.TXT + '</p>' + expected);
     equal(cleanupHtml(given + HTML.P), expected + CLEAN.P);
-    equal(cleanupHtml(given + HTML.TXT), expected + HTML.TXT);
+    equal(cleanupHtml(given + HTML.TXT), expected + '<p>' + HTML.TXT + '</p>');
     equal(cleanupHtml(HTML.P + given + HTML.P), CLEAN.P + expected + CLEAN.P);
-    equal(cleanupHtml(HTML.TXT + given + HTML.TXT), HTML.TXT + expected + HTML.TXT);
+    equal(cleanupHtml(HTML.TXT + given + HTML.TXT), '<p>' + HTML.TXT + '</p>' + expected + '<p>' + HTML.TXT + '</p>');
 });
 
 test('indented lists', function () {
-    var expected = '<ol><li>Item1</li><li>Item1.1</li></ol>';
+    var expected = '<ol><li><p>Item1</p></li><li><p>Item1.1</p></li></ol>';
     var given = WORD_2013.OL.TREE;
     equal(cleanupHtml(given), expected);
     equal(cleanupHtml(HTML.P + given), CLEAN.P + expected);
-    equal(cleanupHtml(HTML.TXT + given), HTML.TXT + expected);
+    equal(cleanupHtml(HTML.TXT + given), '<p>' + HTML.TXT + '</p>' + expected);
     equal(cleanupHtml(given + HTML.P), expected + CLEAN.P);
-    equal(cleanupHtml(given + HTML.TXT), expected + HTML.TXT);
+    equal(cleanupHtml(given + HTML.TXT), expected + '<p>' + HTML.TXT + '</p>');
     equal(cleanupHtml(HTML.P + given + HTML.P), CLEAN.P + expected + CLEAN.P);
-    equal(cleanupHtml(HTML.TXT + given + HTML.TXT), HTML.TXT + expected + HTML.TXT);
+    equal(cleanupHtml(HTML.TXT + given + HTML.TXT), '<p>' + HTML.TXT + '</p>' + expected + '<p>' + HTML.TXT + '</p>');
 });
 
 module('Word UL lists');
 test('single item', function () {
-    var expected = '<ul><li>Item</li></ul>';
+    var expected = '<ul><li><p>Item</p></li></ul>';
     var given = WORD_2013.UL.ONE;
     equal(cleanupHtml(given), expected);
     equal(cleanupHtml(HTML.P + given), CLEAN.P + expected);
-    equal(cleanupHtml(HTML.TXT + given), HTML.TXT + expected);
+    equal(cleanupHtml(HTML.TXT + given), '<p>' + HTML.TXT + '</p>' + expected);
     equal(cleanupHtml(given + HTML.P), expected + CLEAN.P);
-    equal(cleanupHtml(given + HTML.TXT), expected + HTML.TXT);
+    equal(cleanupHtml(given + HTML.TXT), expected + '<p>' + HTML.TXT + '</p>');
     equal(cleanupHtml(HTML.P + given + HTML.P), CLEAN.P + expected + CLEAN.P);
-    equal(cleanupHtml(HTML.TXT + given + HTML.TXT), HTML.TXT + expected + HTML.TXT);
+    equal(cleanupHtml(HTML.TXT + given + HTML.TXT), '<p>' + HTML.TXT + '</p>' + expected + '<p>' + HTML.TXT + '</p>');
 });
 
 test('multiple items', function () {
-    var expected = '<ul><li>Item1</li><li>Item2</li></ul>';
+    var expected = '<ul><li><p>Item1</p></li><li><p>Item2</p></li></ul>';
     var given = WORD_2013.UL.TWO;
     equal(cleanupHtml(given), expected);
     equal(cleanupHtml(HTML.P + given), CLEAN.P + expected);
-    equal(cleanupHtml(HTML.TXT + given), HTML.TXT + expected);
+    equal(cleanupHtml(HTML.TXT + given), '<p>' + HTML.TXT + '</p>' + expected);
     equal(cleanupHtml(given + HTML.P), expected + CLEAN.P);
-    equal(cleanupHtml(given + HTML.TXT), expected + HTML.TXT);
+    equal(cleanupHtml(given + HTML.TXT), expected + '<p>' + HTML.TXT + '</p>');
     equal(cleanupHtml(HTML.P + given + HTML.P), CLEAN.P + expected + CLEAN.P);
-    equal(cleanupHtml(HTML.TXT + given + HTML.TXT), HTML.TXT + expected + HTML.TXT);
+    equal(cleanupHtml(HTML.TXT + given + HTML.TXT), '<p>' + HTML.TXT + '</p>' + expected + '<p>' + HTML.TXT + '</p>');
 });
 
 test('indented lists', function () {
-    var expected = '<ul><li>Item1</li><li>Item1.1</li></ul>';
+    var expected = '<ul><li><p>Item1</p></li><li><p>Item1.1</p></li></ul>';
     var given = WORD_2013.UL.TREE;
     equal(cleanupHtml(given), expected);
     equal(cleanupHtml(HTML.P + given), CLEAN.P + expected);
-    equal(cleanupHtml(HTML.TXT + given), HTML.TXT + expected);
+    equal(cleanupHtml(HTML.TXT + given), '<p>' + HTML.TXT + '</p>' + expected);
     equal(cleanupHtml(given + HTML.P), expected + CLEAN.P);
-    equal(cleanupHtml(given + HTML.TXT), expected + HTML.TXT);
+    equal(cleanupHtml(given + HTML.TXT), expected + '<p>' + HTML.TXT + '</p>');
     equal(cleanupHtml(HTML.P + given + HTML.P), CLEAN.P + expected + CLEAN.P);
-    equal(cleanupHtml(HTML.TXT + given + HTML.TXT), HTML.TXT + expected + HTML.TXT);
+    equal(cleanupHtml(HTML.TXT + given + HTML.TXT), '<p>' + HTML.TXT + '</p>' + expected + '<p>' + HTML.TXT + '</p>');
 });
 
 module('Html lists');
 test('lists can not be nested', function () {
-    equal(cleanupHtml('<ul><li>Item1<ul><li>Item1.1</li></ul></li></ul>'), '<ul><li>Item1</li><li>Item1.1</li></ul>');
-    equal(cleanupHtml('<ol><li>Item1<ol><li>Item1.1</li></ol></li></ol>'), '<ol><li>Item1</li><li>Item1.1</li></ol>');
-    equal(cleanupHtml('<div><ul><li>Item</li></ul></div>'), '<ul><li>Item</li></ul>');
-    equal(cleanupHtml('<p><ul><li>Item</li></ul></p>'), '<ul><li>Item</li></ul>');
+    equal(cleanupHtml('<ul><li>Item1<ul><li>Item1.1</li></ul></li></ul>'), '<ul><li><p>Item1</p></li><li><p>Item1.1</p></li></ul>');
+    equal(cleanupHtml('<ol><li>Item1<ol><li>Item1.1</li></ol></li></ol>'), '<ol><li><p>Item1</p></li><li><p>Item1.1</p></li></ol>');
+    equal(cleanupHtml('<div><ul><li>Item</li></ul></div>'), '<ul><li><p>Item</p></li></ul>');
+    equal(cleanupHtml('<p><ul><li>Item</li></ul></p>'), '<ul><li><p>Item</p></li></ul>');
 });
 
 module('Html other');
@@ -135,12 +139,12 @@ test('replace long tags with short', function () {
 });
 
 test('replace headers', function () {
-    equal(cleanupHtml('<h1>Header</h1>'), '<b>Header</b><br>');
-    equal(cleanupHtml('<h2>Header</h2>'), '<b>Header</b><br>');
-    equal(cleanupHtml('<h3>Header</h3>'), '<b>Header</b><br>');
-    equal(cleanupHtml('<h4>Header</h4>'), '<b>Header</b><br>');
-    equal(cleanupHtml('<h5>Header</h5>'), '<b>Header</b><br>');
-    equal(cleanupHtml('<h6>Header</h6>'), '<b>Header</b><br>');
+    equal(cleanupHtml('<h1>Header</h1>'), '<p><b>Header</b></p>');
+    equal(cleanupHtml('<h2>Header</h2>'), '<p><b>Header</b></p>');
+    equal(cleanupHtml('<h3>Header</h3>'), '<p><b>Header</b></p>');
+    equal(cleanupHtml('<h4>Header</h4>'), '<p><b>Header</b></p>');
+    equal(cleanupHtml('<h5>Header</h5>'), '<p><b>Header</b></p>');
+    equal(cleanupHtml('<h6>Header</h6>'), '<p><b>Header</b></p>');
 });
 
 test('convert spans with styles to allowed tags', function () {
@@ -161,13 +165,13 @@ test('will not nest duplicate tags', function () {
     equal(cleanupHtml('<b><span style="font-weight:bold;text-decoration:underline">span</span></b>'), '<b><u>span</u></b>');
 });
 
-test('remove paragrahs and divs', function () {
+test('convert divs to pargaraphs', function () {
     equal(cleanupHtml(HTML.DIV), CLEAN.DIV);
     equal(cleanupHtml(HTML.P), CLEAN.P);
-    equal(cleanupHtml(HTML.TXT + HTML.DIV), HTML.TXT + '<br>' + CLEAN.DIV);
-    equal(cleanupHtml(HTML.TXT + HTML.P), HTML.TXT + '<br>' + CLEAN.P);
-    equal(cleanupHtml(HTML.TXT + HTML.DIV + HTML.TXT), HTML.TXT + '<br>' + CLEAN.DIV + HTML.TXT);
-    equal(cleanupHtml(HTML.TXT + HTML.P + HTML.TXT), HTML.TXT + '<br>' + CLEAN.P + HTML.TXT);
+    equal(cleanupHtml(HTML.TXT + HTML.DIV), '<p>' + HTML.TXT + '</p>' + CLEAN.DIV);
+    equal(cleanupHtml(HTML.TXT + HTML.P), '<p>' + HTML.TXT + '</p>' + CLEAN.P);
+    equal(cleanupHtml(HTML.TXT + HTML.DIV + HTML.TXT), '<p>' + HTML.TXT + '</p>' + CLEAN.DIV + '<p>' + HTML.TXT + '</p>');
+    equal(cleanupHtml(HTML.TXT + HTML.P + HTML.TXT), '<p>' + HTML.TXT + '</p>' + CLEAN.P + '<p>' + HTML.TXT + '</p>');
 });
 
 test('remove not allowed tags', function () {
