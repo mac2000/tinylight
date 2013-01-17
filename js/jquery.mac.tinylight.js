@@ -22,8 +22,6 @@
             // removing all non printable space charactes
             // removing spaces between tags
             // converting all <br> tags to same format
-            var debug = (html === 'Hello<div>d</div>');
-
             html = html.replace(/&nbsp;/gi, ' ').replace(/\s+/g, ' ').replace(/[\t\r\n\n]+/g, '').replace(/>\s+</g, '><').replace(/<br\s*\/?>/gi, '<br>');
 
             // strtr()
@@ -32,11 +30,8 @@
 
 
             var el = $('<div>').html(html);
-
             $('*:empty:not(br)', el).remove(); // remove empty nodes
-            $('*', el).filter(function(){ return this.nodeType == 3 && /\s+/.test(this.nodeValue); }).remove(); // remove empty text nodes
-            el.contents().filter(function(){ return this.nodeType == 8; }).remove(); // remove comments
-            el.contents().filter(function(){ return this.nodeType != 1; }).wrap('<p />'); // wrap text nodes with paragraphs
+            $('*').filter(function(){ return this.nodeType == 3 && /\s+/.test(this.nodeValue); }).remove(); // remove empty text nodes
 
             // Word lists
             var list_items = $('p', el).filter(function(index, item){
@@ -64,17 +59,12 @@
                 if(parent != el) $(parent).replaceWith($(parent).html());
             });
 
-            $('li', el).contents().filter(function(){ return this.nodeType != 1; }).wrap('<p />'); // wrap text nodes in li with paragraphs
-
             // Replace long tags to short
             $('strong', el).replaceWith(function(){
                 return '<b>' + $(this).html() + '</b>';
             });
             $('em', el).replaceWith(function(){
                 return '<i>' + $(this).html() + '</i>';
-            });
-            $('div', el).replaceWith(function(){
-                return '<p>' + $(this).html() + '</p>';
             });
             $('h1, h2, h3, h4, h5, h6', el).replaceWith(function(){
                 return '<p><b>' + $(this).html() + '</b></p>';
@@ -100,17 +90,17 @@
                 $(item).replaceWith(start + $(item).html() + end);
             });
 
-            /*$('p, div', el).each(function(index, item){
+            $('p, div', el).each(function(index, item){
                 $('<br>').insertAfter(item);
                 if(item.previousSibling && item.previousSibling.nodeType == 3 && !/\s+/.test(item.previousSibling.nodeValue)) {
                     $('<br>').insertBefore(item);
                 }
                 $(item).replaceWith($(item).html());
-            });*/
+            });
 
-            jQuery('*:not(b, i, u, ol, ul, li, p)', el).remove(); // remove not allowed tags
+            jQuery('*:not(b, i, u, ol, ul, li, br)', el).remove(); // remove not allowed tags
 
-
+            el.contents().filter(function(){ return this.nodeType == 8; }).remove(); // remove comments
 
             // Remove attributes
             $('*', el).each(function(index, item){
@@ -123,7 +113,7 @@
 
             html = html.replace(/<\/(b|i|u)>\s*<\1>/gi, ''); // Remove repeated tags like: <b>H</b><b>ello</b>
 
-
+            html = html.replace(/<br>\s*<br>\s*(<br>\s*)+/gi, '<br><br>');
 
             return html;
         },
@@ -191,11 +181,8 @@
             self.wnd = self.frame.get(0).contentWindow;
             self.doc = self.wnd.document;
             self.doc.open();
-            self.doc.write('<!DOCTYPE html><title></title><meta charset="utf-8"><link rel="stylesheet" href="http://css.cdn.tl/normalize.css"><style>body{margin:.5em;font-family:' + self.options.fontFamily + ';font-size:' + self.options.fontSize + ';background-color:' + self.options.backgroundColor + ';}</style><body></body>');// + '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>'
+            self.doc.write('<!DOCTYPE html><title></title><meta charset="utf-8"><link rel="stylesheet" href="http://css.cdn.tl/normalize.css"><style>body{margin:.5em;font-family:' + self.options.fontFamily + ';font-size:' + self.options.fontSize + ';background-color:' + self.options.backgroundColor + ';}</style><body>' + self.element.val() + '</body>');// + '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>'
             self.doc.close();
-
-            self.setHtml(self.element.val());
-            //' + self.element.val() + '
 
             // Make it editable
             if (self.doc.body.contentEditable) self.doc.body.contentEditable = true;
