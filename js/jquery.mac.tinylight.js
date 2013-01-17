@@ -179,7 +179,7 @@
 
             // Create toolbar buttons
             var buttons = ['Bold', 'Italic', 'Underline', 'InsertUnorderedList', 'InsertOrderedList'];
-            if (!jQuery.browser.msie) {
+            if (!navigator.userAgent.match(/MSIE/)) {
                 buttons.push('Undo');
                 buttons.push('Redo');
             }
@@ -217,7 +217,7 @@
             }
 
             // Attach events
-            $(self.doc).on('keyup mouseup', function(){
+            $(self.doc).on('keyup mouseup', function(e){
                 self._updateToolbar();
 
                 self.nowLength = self.doc.body.innerHTML.length;
@@ -225,7 +225,7 @@
                 self.wasLength = self.nowLength;
             });
 
-            $($.browser.msie ? self.doc : self.wnd).on('blur deactivate', function(){
+            $(navigator.userAgent.match(/MSIE/) ? self.doc : self.wnd).on('blur deactivate', function(){
                 //alert('blur');
                 self.setHtml(self.getHtml());
             });
