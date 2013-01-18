@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<title>WYSIWYG</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/latest/css/bootstrap-combined.min.css">
+<link rel="stylesheet" href="css/jquery.mac.tinylight.css">
+<style>
+    .container-fluid {
+        padding: 20px;
+    }
+
+    textarea {
+        margin: 20px 0;
+    }
+
+    .span4 > h3 {
+        margin:0;
+    }
+
+    #preview {
+        font-size:16px;
+        line-height:19px;
+        margin-top:20px;
+        padding:8px;
+        border:1px solid #999;
+    }
+    #preview p,
+    #preview ul,
+    #preview ol {
+        margin-top:2px;
+        margin-bottom:2px;
+    }
+    #preview p {
+        background:#eee;
+    }
+    #preview li {
+        background:#ccc
+    }
+</style>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span4">
+            <h3>Demo</h3>
+            <textarea class="span12" name="txt" id="txt" cols="30" rows="10">Hello World</textarea>
+            <hr>
+            <form id="paste" class="form-inline">
+                <div class="row-fluid">
+                    <div class="span9">
+                        <input id="vacancyId" placeholder="Vacancy ID..." type="number" class="span12" min="1" required>
+                    </div>
+                    <div class="span3">
+                        <input class="btn span12" type="submit" value="Paste">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="span4">
+            <h3>Preview</h3>
+            <div id="preview"></div>
+        </div>
+        <div class="span4">
+            <h3>Code</h3>
+            <pre id="code"></pre>
+            <a id="stop" href="#" class="btn btn-block">Stop updating</a>
+            <a id="resume" href="#" class="btn btn-block">Resume updating</a>
+        </div>
+    </div>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<!-- actually we need only jquery.ui.widget.js -->
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="js/jquery.mac.tinylight.js"></script>
+<script>
+    (function ($, window, document, undefined) {
+        var timer;
+        window.txt = $('#txt').tinylight({
+            updateOnKeyUp: true
+        });
+
+        $('#resume').on('click', function(e){
+            e.preventDefault();
+
+            timer = setInterval(function () {
+                $('#preview').html(txt.tinylight('getHtml'));
+                $('#code').html($('<span>').text(txt.tinylight('getHtml')).html());
+            }, 250);
+
+            $(this).hide();
+            $('#stop').show();
+
+            return false;
+        }).trigger('click');
+
+        $('#stop').on('click', function(e){
+            e.preventDefault();
+
+            clearInterval(timer);
+
+            $(this).hide();
+            $('#resume').show();
+
+            return false;
+        });
+
+        $('#paste').on('submit', function(e){
+            e.preventDefault();
+
+            $.getJSON('http://rabota.ua/export/jsonp.ashx?vacancyId=' + $('#vacancyId').val() + '&fields=Description&callback=?', function(data){
+                $('#txt').tinylight('setHtml', data.Description);
+            });
+
+            return false;
+        });
+    })(jQuery, window, document);
+</script>

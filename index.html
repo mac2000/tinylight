@@ -22,7 +22,7 @@
 
             <h3>Usage</h3>
             <hr>
-            <pre><code>$('#txt').wysiwyg();</code></pre>
+            <pre><code>$('#txt').tinylight();</code></pre>
 
             <h3>Tools</h3>
             <hr>
@@ -44,6 +44,8 @@
 <script src="js/tests.js"></script>
 <script>
     (function ($, window, document, undefined) {
-        window.txt = $('#txt').tinylight().show();
+        window.txt = $('#txt').tinylight({
+            updateOnKeyUp: true
+        }).show();
     })(jQuery, window, document);
 </script>

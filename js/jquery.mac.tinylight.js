@@ -13,16 +13,25 @@
             height:300,
             fontSize:'100%',
             fontFamily:'Helvetica,Arial,sans-serif',
-            backgroundColor:'white'
+            backgroundColor:'white',
+            blockTag:'p',
+            updateOnKeyUp:false
         },
         cleanupHtml:function(html){
+            var debug = html === '<p class="MsoListParagraph" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">1.<span style="font-size: 7pt; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]--><span lang="EN-US">Item<o:p></o:p></span></p>';
             // some basic replacements, we are:
             // removing &nbsp;
             // removing multiple spaces
             // removing all non printable space charactes
             // removing spaces between tags
             // converting all <br> tags to same format
-            html = html.replace(/&nbsp;/gi, ' ').replace(/\s+/g, ' ').replace(/[\t\r\n\n]+/g, '').replace(/>\s+</g, '><').replace(/<br\s*\/?>/gi, '<br>');
+            // change <p>&nbsp;</p> to <br>
+            html = html.replace(/\s+/g, ' ').replace(/[\t\r\n\n]+/g, '').replace(/>\s+</g, '><').replace(/<br\s*\/?>/gi, '<br>');
+
+            html = html.replace(/<(div|p)><br><\/\1>/gi, '<p>&nbsp;</p>'); // convert line breaks
+            html = html.replace(/<(div|p)><\/\1>/gi, '<p>&nbsp;</p>');
+            html = html.replace(/<(div|p)><(ul|ol)>/gi, '<$2>').replace(/<\/(ul|ol)><\/(div|p)>/gi, '</$1>'); // lists can not be nested
+
 
             // strtr()
             var strtr = '\u2122,<sup>TM</sup>,\u2026,...,\x93|\x94|\u201c|\u201d,",\x60|\x91|\x92|\u2018|\u2019,\',\u2013|\u2014|\u2015|\u2212,-'.split(',');
@@ -30,8 +39,12 @@
 
 
             var el = $('<div>').html(html);
+            $('p:empty', el).remove();
             $('*:empty:not(br)', el).remove(); // remove empty nodes
+            el.children('br').filter(function(){ return !this.parentNode || this.parentNode.nodeName != 'li'; }).remove(); // remove all <br> except thous who in <li>
             $('*').filter(function(){ return this.nodeType == 3 && /\s+/.test(this.nodeValue); }).remove(); // remove empty text nodes
+            el.contents().filter(function(){ return this.nodeType == 3; }).wrap('<p />');
+            el.contents().filter(function(){ return this.nodeType == 8; }).remove(); // remove comments
 
             // Word lists
             var list_items = $('p', el).filter(function(index, item){
@@ -90,17 +103,12 @@
                 $(item).replaceWith(start + $(item).html() + end);
             });
 
-            $('p, div', el).each(function(index, item){
-                $('<br>').insertAfter(item);
-                if(item.previousSibling && item.previousSibling.nodeType == 3 && !/\s+/.test(item.previousSibling.nodeValue)) {
-                    $('<br>').insertBefore(item);
-                }
-                $(item).replaceWith($(item).html());
+            $('div', el).replaceWith(function(){
+                return '<p>' + $(this).html() + '</p>';
             });
 
-            jQuery('*:not(b, i, u, ol, ul, li, br)', el).remove(); // remove not allowed tags
+            jQuery('*:not(b, i, u, ol, ul, li, p, br)', el).remove(); // remove not allowed tags
 
-            el.contents().filter(function(){ return this.nodeType == 8; }).remove(); // remove comments
 
             // Remove attributes
             $('*', el).each(function(index, item){
@@ -113,15 +121,11 @@
 
             html = html.replace(/<\/(b|i|u)>\s*<\1>/gi, ''); // Remove repeated tags like: <b>H</b><b>ello</b>
 
-            html = html.replace(/<br>\s*<br>\s*(<br>\s*)+/gi, '<br><br>');
+            //html = html.replace(/([^>])<br><(ul|ol)>/gi, '$1<$2>'); // Remove unwanted <br> before lists
+
+            //html = html.replace(/<br>\s*<br>\s*(<br>\s*)+/gi, '<br><br>');
 
             return html;
-        },
-        htmlEncode:function(html){
-            return $('<span>').text(html).html();
-        },
-        htmlDecode:function(html){
-            return $('<span>').html(html).text();
         },
         setHtml:function(html){
             html = this.cleanupHtml(html);
@@ -130,6 +134,25 @@
         },
         getHtml:function(){
             return this.doc.body.innerHTML;
+        },
+        _selectedNode:function(){
+            var self = this;
+
+            // IE
+            if(typeof self.doc.caretPos != 'undefined' && typeof self.doc.caretPos.parentElement != 'undefined') {
+                return(self.doc.caretPos.parentElement());
+            }
+
+            // FF, O, S, C
+            if(typeof self.wnd.getSelection != 'undefined') {
+                var sel = self.wnd.getSelection();
+                var node = sel.focusNode;
+                if(node) {
+                    return (node.nodeName == '#text') ? node.parentNode : node;
+                }
+            }
+
+            return null;
         },
         _addButton:function (command) {
             var self = this;
@@ -181,8 +204,10 @@
             self.wnd = self.frame.get(0).contentWindow;
             self.doc = self.wnd.document;
             self.doc.open();
-            self.doc.write('<!DOCTYPE html><title></title><meta charset="utf-8"><link rel="stylesheet" href="http://css.cdn.tl/normalize.css"><style>body{margin:.5em;font-family:' + self.options.fontFamily + ';font-size:' + self.options.fontSize + ';background-color:' + self.options.backgroundColor + ';}</style><body>' + self.element.val() + '</body>');// + '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>'
+            self.doc.write('<!DOCTYPE html><title></title><meta charset="utf-8"><link rel="stylesheet" href="http://css.cdn.tl/normalize.css"><style>body{margin:.5em;font-family:' + self.options.fontFamily + ';font-size:' + self.options.fontSize + ';background-color:' + self.options.backgroundColor + ';}p,ul,ol{margin:2px 0}p{background:#eee;}li{background:#ccc}</style><body></body>');// + '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>'
             self.doc.close();
+
+            $.trim(self.element.val()) == '' ? self.setHtml('<p>&nbsp;</p>') : self.setHtml(self.element.val());
 
             // Make it editable
             if (self.doc.body.contentEditable) self.doc.body.contentEditable = true;
@@ -204,20 +229,75 @@
             }
 
             // Attach events
+            $(self.doc).on('keyup', function(e){
+                if(e.keyCode == 13 && !e.shiftKey) { // RETURN key without shift
+                    //RETURN key
+                    //cleanup <br><br> between paragraphs
+                    jQuery(self.doc.body).children('br').filter(function(){ return this.parentNode.nodeName != 'li'; }).remove();
+
+                    //fix PRE bug #73
+                    container = self._selectedNode();
+                    if(container && container.tagName.toLowerCase() == 'pre') {
+                        self.doc.execCommand('FormatBlock', false, self.options.blockTag); //create P after PRE
+                    }
+                }
+
+                //fix #112
+                /*if(e.keyCode == 13 && e.shiftKey && navigator.userAgent.match(/WebKit/)) {
+                    self.doc.execCommand('InsertLineBreak', false, null);
+                }*/
+
+                //NOT BACKSPACE, NOT DELETE, NOT CTRL, NOT COMMAND
+                //text nodes replaced by P
+                if(e.keyCode != 8
+                    && e.keyCode != 17
+                    && e.keyCode != 46
+                    && e.keyCode != 224
+                    && !e.metaKey
+                    && !e.ctrlKey) {
+
+                    container = self._selectedNode();
+
+                    var name = container.tagName.toLowerCase();
+
+                    //fix forbidden main containers
+                    if(
+                        name == "strong" ||
+                        name == "b" ||
+                        name == "em" ||
+                        name == "i" ||
+                        name == "sub" ||
+                        name == "sup" ||
+                        name == "a"
+                    ) name = container.parentNode.tagName.toLowerCase();
+
+                    if(name == 'body' || name == 'div' || name == 'p') self.doc.execCommand('FormatBlock', false, self.options.blockTag);
+
+                }
+
+                // Catch Ctrl+v and Shift+Ins and run cleanup
+                if((e.keyCode == 86 && e.ctrlKey) || (e.keyCode == 45 && e.shiftKey)) {
+                    self.setHtml(self.getHtml());
+                }
+            });
+
+            // On any change, check how much is changed and if it is greater than limit run cleanup
             $(self.doc).on('keyup mouseup', function(e){
                 self._updateToolbar();
 
                 self.nowLength = self.doc.body.innerHTML.length;
                 if(Math.abs(self.nowLength - self.wasLength) > self.options.cleanupLengthTrigger) self.setHtml(self.getHtml());
                 self.wasLength = self.nowLength;
+
+                if(self.options.updateOnKeyUp) {
+                    self.element.val(self.doc.body.innerHTML);
+                }
             });
 
             $(navigator.userAgent.match(/MSIE/) ? self.doc : self.wnd).on('blur deactivate', function(){
-                //alert('blur');
                 self.setHtml(self.getHtml());
             });
 
-            //self._updateToolbar();
             self.holder.show();
         },
         _setOption:function (key, value) {
