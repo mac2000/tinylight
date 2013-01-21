@@ -18,32 +18,25 @@
             updateOnKeyUp:false
         },
         cleanupHtml:function(html){
-            var debug = html === '<p class="MsoListParagraph" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">1.<span style="font-size: 7pt; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]--><span lang="EN-US">Item<o:p></o:p></span></p>';
+            var debug = html === '<span style="font-weight:bold;font-style:italic;text-decoration:underline">span</span>';
             // some basic replacements, we are:
-            // removing &nbsp;
             // removing multiple spaces
             // removing all non printable space charactes
             // removing spaces between tags
             // converting all <br> tags to same format
-            // change <p>&nbsp;</p> to <br>
             html = html.replace(/\s+/g, ' ').replace(/[\t\r\n\n]+/g, '').replace(/>\s+</g, '><').replace(/<br\s*\/?>/gi, '<br>');
 
-            html = html.replace(/<(div|p)><br><\/\1>/gi, '<p>&nbsp;</p>'); // convert line breaks
-            html = html.replace(/<(div|p)><\/\1>/gi, '<p>&nbsp;</p>');
+            html = html.replace(/<(div|p)>(<br>)?<\/\1>/gi, '<p>&nbsp;</p>'); // Convert all kind of empty lines to <p>&nbsp;</p>
             html = html.replace(/<(div|p)><(ul|ol)>/gi, '<$2>').replace(/<\/(ul|ol)><\/(div|p)>/gi, '</$1>'); // lists can not be nested
 
-
-            // strtr()
             var strtr = '\u2122,<sup>TM</sup>,\u2026,...,\x93|\x94|\u201c|\u201d,",\x60|\x91|\x92|\u2018|\u2019,\',\u2013|\u2014|\u2015|\u2212,-'.split(',');
             for (var i = 0; i < strtr.length; i += 2) html = html.replace(new RegExp(strtr[i], 'gi'), strtr[i + 1]);
 
-
             var el = $('<div>').html(html);
-            $('p:empty', el).remove();
-            $('*:empty:not(br)', el).remove(); // remove empty nodes
+            while($('*:empty:not(br)', el).size() > 0) $('*:empty:not(br)', el).remove(); // remove empty non <br> nodes
             el.children('br').filter(function(){ return !this.parentNode || this.parentNode.nodeName != 'li'; }).remove(); // remove all <br> except thous who in <li>
             $('*').filter(function(){ return this.nodeType == 3 && /\s+/.test(this.nodeValue); }).remove(); // remove empty text nodes
-            el.contents().filter(function(){ return this.nodeType == 3; }).wrap('<p />');
+            el.contents().filter(function(){ return this.nodeType == 3; }).wrap('<p />'); // wrap text nodes in paragraphs
             el.contents().filter(function(){ return this.nodeType == 8; }).remove(); // remove comments
 
             // Word lists
@@ -51,8 +44,8 @@
                 return /mso-list/gi.test($(item).attr('style'));
             });
             $.each(list_items, function(index, item){
-                var tagName = /^[0-9a-np-z]/i.test($.trim($(item).text())) ? 'ol' : 'ul';
-                $(item).html($(item).html().replace(/<!--\[if !supportLists\]-->.+<!--\[endif\]-->/gi, ''));
+                var tagName = /^[0-9a-np-z]/i.test($.trim($(item).text()).replace(/(&lt;|<)!--\[if !supportLists\]--(&gt;|>)/gi, '')) ? 'ol' : 'ul';
+                item.innerHTML = item.innerHTML.replace(/(&lt;|<)!--\[if !supportLists\]--(&gt;|>).+\1!--\[endif\]--\2/gi, '');
                 var content = $(item).find('span[lang]:first').size() > 0 ? $(item).find('span[lang]:first').html() : $(item).html();
                 $(item).replaceWith('<' + tagName + '><li>' + content + '</li></' + tagName + '>');
             });
@@ -102,6 +95,7 @@
                 }
                 $(item).replaceWith(start + $(item).html() + end);
             });
+            while($('*:empty:not(br)', el).size() > 0) $('*:empty:not(br)', el).remove(); // IE 9, got after test <b><i>span</i></b><i></i> - removing empty nodes
 
             $('div', el).replaceWith(function(){
                 return '<p>' + $(this).html() + '</p>';
@@ -120,10 +114,6 @@
             html = el.html();
 
             html = html.replace(/<\/(b|i|u)>\s*<\1>/gi, ''); // Remove repeated tags like: <b>H</b><b>ello</b>
-
-            //html = html.replace(/([^>])<br><(ul|ol)>/gi, '$1<$2>'); // Remove unwanted <br> before lists
-
-            //html = html.replace(/<br>\s*<br>\s*(<br>\s*)+/gi, '<br><br>');
 
             return html;
         },
