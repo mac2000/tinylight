@@ -65,6 +65,10 @@
 <script>
     var timer;
     jQuery('#txt').tinylight({ updateOnKeyUp: true });
+    timer = setInterval(function () {
+        jQuery('#preview').html(jQuery('#txt').tinylight('getHtml'));
+        jQuery('#code').html(jQuery('<span>').text(jQuery('#txt').tinylight('getHtml')).html());
+    }, 250);
 </script>
 </body>
 </html>
