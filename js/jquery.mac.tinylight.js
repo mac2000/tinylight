@@ -18,7 +18,7 @@
             updateOnKeyUp:false
         },
         cleanupHtml:function(html){
-            var debug = html === '<span style="font-weight:bold;font-style:italic;text-decoration:underline">span</span>';
+            var debug = html === '<span style="font-weight:bold;font-style:italic">span</span>';
             // some basic replacements, we are:
             // removing multiple spaces
             // removing all non printable space charactes
@@ -76,6 +76,7 @@
                 return '<p><b>' + $(this).html() + '</b></p>';
             });
 
+
             // Convert styled spans
             $('span', el).each(function(index, item){
                 var start = '';
@@ -86,12 +87,12 @@
                     end = '</b>';
                 }
                 if($(item).css('font-style') == 'italic' && $(item).closest('i').size() == 0) {
-                    start += '<i>';
-                    end += '</i>';
+                    start = start + '<i>';
+                    end = '</i>' + end;
                 }
                 if($(item).css('text-decoration') == 'underline' && $(item).closest('u').size() == 0) {
-                    start += '<u>';
-                    end += '</u>';
+                    start = start + '<u>';
+                    end = '</u>' + end;
                 }
                 $(item).replaceWith(start + $(item).html() + end);
             });
@@ -114,6 +115,8 @@
             html = el.html();
 
             html = html.replace(/<\/(b|i|u)>\s*<\1>/gi, ''); // Remove repeated tags like: <b>H</b><b>ello</b>
+            html = html.replace(/>\s+</g, '><'); // IE 8 fix, he had added some strange symbols not \r\n and not \n
+            html = html.replace(/\s*(<\/?\w+>)\s*/g, '$1'); // Trim tag contents
 
             return html;
         },
