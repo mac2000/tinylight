@@ -104,7 +104,7 @@
         $('#paste').on('submit', function(e){
             e.preventDefault();
 
-            $.getJSON('http://rabota.ua/export/jsonp.ashx?vacancyId=' + $('#vacancyId').val() + '&fields=Description&callback=?', function(data){
+            var jqxhr = $.getJSON('http://rabota.ua/export/jsonp.ashx?vacancyId=' + $('#vacancyId').val() + '&fields=Description&callback=?', function(data){
                 $('#txt').tinylight('setHtml', data.Description);
             });
 
