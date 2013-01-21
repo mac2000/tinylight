@@ -1,24 +1,29 @@
 <!DOCTYPE html>
-<title>WYSIWYG</title>
-<meta charset="utf-8">
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/latest/css/bootstrap-combined.min.css">
-<link rel="stylesheet" href="css/jquery.mac.tinylight.css">
-<link rel="stylesheet" href="//code.jquery.com/qunit/qunit-1.10.0.css">
-<style>
-    .container-fluid {
-        padding: 20px;
-    }
+<html>
+<head>
+    <title>WYSIWYG</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="components/bootstrap/docs/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="css/jquery.mac.tinylight.css">
+    <link rel="stylesheet" href="components/qunit/qunit.css">
+    <style>
+        .container-fluid {
+            padding: 20px;
+        }
 
-    textarea {
-        margin: 20px 0;
-    }
-</style>
+        textarea {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span6">
             <h3>TinyLight Demo</h3>
             <hr>
             <textarea class="span12" name="txt" id="txt" cols="30" rows="10">Hello World</textarea>
+            <label for="txt">TinyLight Demo</label>
 
             <h3>Usage</h3>
             <hr>
@@ -36,16 +41,13 @@
         </div>
     </div>
 </div>
-<script src="//code.jquery.com/qunit/qunit-1.10.0.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-<!-- actually we need only jquery.ui.widget.js -->
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="components/qunit/qunit.js"></script>
+<script src="components/jquery/jquery.min.js"></script>
+<script src="components/jquery-ui/ui/jquery.ui.widget.js"></script>
 <script src="js/jquery.mac.tinylight.js"></script>
 <script src="js/tests.js"></script>
 <script>
-    (function ($, window, document, undefined) {
-        window.txt = $('#txt').tinylight({
-            updateOnKeyUp: true
-        }).show();
-    })(jQuery, window, document);
+    jQuery('#txt').tinylight({ updateOnKeyUp: true }).show();
 </script>
+</body>
+</html>

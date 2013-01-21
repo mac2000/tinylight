@@ -1,41 +1,36 @@
 var WORD_2013 = {
     P: '<p class="MsoNormal"><span lang="EN-US">p<o:p></o:p></span></p>',
-    OL:{
-        ONE:'<p class="MsoListParagraph" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">1.<span style="font-size: 7pt; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]--><span lang="EN-US">Item<o:p></o:p></span></p>',
-        TWO:'<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">1.<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]--><span lang="EN-US">Item1<o:p></o:p></span></p><p class="MsoListParagraphCxSpLast" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">2.<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]--><span lang="EN-US">Item2<o:p></o:p></span></p>',
-        TREE:'<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]-->1.<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><!--[endif]--><span lang="EN-US">Item1</span><o:p></o:p></p><p class="MsoListParagraphCxSpLast" style="margin-left:72.0pt;mso-add-space:auto;text-indent:-18.0pt;mso-list:l0 level2 lfo1"><!--[if !supportLists]-->a.<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><!--[endif]--><span lang="EN-US">Item1.1</span><o:p></o:p></p>'
+    OL: {
+        ONE: '<p class="MsoListParagraph" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">1.<span style="font-size: 7pt; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]--><span lang="EN-US">Item<o:p></o:p></span></p>',
+        TWO: '<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">1.<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]--><span lang="EN-US">Item1<o:p></o:p></span></p><p class="MsoListParagraphCxSpLast" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">2.<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[endif]--><span lang="EN-US">Item2<o:p></o:p></span></p>',
+        TREE: '<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]-->1.<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><!--[endif]--><span lang="EN-US">Item1</span><o:p></o:p></p><p class="MsoListParagraphCxSpLast" style="margin-left:72.0pt;mso-add-space:auto;text-indent:-18.0pt;mso-list:l0 level2 lfo1"><!--[if !supportLists]-->a.<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><!--[endif]--><span lang="EN-US">Item1.1</span><o:p></o:p></p>'
     },
-    UL:{
-        ONE:'<p class="MsoListParagraph" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US" style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol;mso-ansi-language:EN-US">·<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><!--[endif]--><span lang="EN-US">Item<o:p></o:p></span></p>',
-        TWO:'<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US" style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol;mso-ansi-language:EN-US">·<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><!--[endif]--><span lang="EN-US">Item1<o:p></o:p></span></p><p class="MsoListParagraphCxSpLast" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US" style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol;mso-ansi-language:EN-US">·<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><!--[endif]--><span lang="EN-US">Item2<o:p></o:p></span></p>',
-        TREE:'<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US" style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol;mso-ansi-language:EN-US">·<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><!--[endif]--><span lang="EN-US">Item1<o:p></o:p></span></p><p class="MsoListParagraphCxSpLast" style="margin-left:72.0pt;mso-add-space:auto;text-indent:-18.0pt;mso-list:l0 level2 lfo1"><!--[if !supportLists]--><span lang="EN-US" style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;mso-ansi-language:EN-US">o<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;</span></span><!--[endif]--><span lang="EN-US">Item1.1<o:p></o:p></span></p>'
+    UL: {
+        ONE: '<p class="MsoListParagraph" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US" style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol;mso-ansi-language:EN-US">·<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><!--[endif]--><span lang="EN-US">Item<o:p></o:p></span></p>',
+        TWO: '<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US" style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol;mso-ansi-language:EN-US">·<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><!--[endif]--><span lang="EN-US">Item1<o:p></o:p></span></p><p class="MsoListParagraphCxSpLast" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US" style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol;mso-ansi-language:EN-US">·<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><!--[endif]--><span lang="EN-US">Item2<o:p></o:p></span></p>',
+        TREE: '<p class="MsoListParagraphCxSpFirst" style="text-indent:-18.0pt;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US" style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol;mso-ansi-language:EN-US">·<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><!--[endif]--><span lang="EN-US">Item1<o:p></o:p></span></p><p class="MsoListParagraphCxSpLast" style="margin-left:72.0pt;mso-add-space:auto;text-indent:-18.0pt;mso-list:l0 level2 lfo1"><!--[if !supportLists]--><span lang="EN-US" style="font-family:&quot;Courier New&quot;;mso-fareast-font-family:&quot;Courier New&quot;;mso-ansi-language:EN-US">o<span style="font-size: 7pt; line-height: normal; font-family: Times New Roman; ">&nbsp;&nbsp;</span></span><!--[endif]--><span lang="EN-US">Item1.1<o:p></o:p></span></p>'
     }
 
 };
-var WORDPAD = {
-    OLD:{
-        ONE:'',
-        TWO:'<div>1.<span class="Apple-tab-span" style="white-space:pre"><span style="white-space: normal;">	</span></span>Item1</div><div>2.<span class="Apple-tab-span" style="white-space:pre"><span style="white-space: normal;">	</span></span>Item2</div>',
-        TREE:'<div>1.<span class="Apple-tab-span" style="white-space:pre"><span style="white-space: normal;"> </span></span>Item1</div><div>2.<span class="Apple-tab-span" style="white-space:pre"><span style="white-space: normal;">    </span></span>Item1.1</div>'
-    }
-};
+
 var HTML = {
     P: '<p>p</p>',
     DIV: '<div>d</div>',
     TXT: 'Hello'
 };
+
 var CLEAN = {
     P: '<p>p</p>',
     DIV: '<p>d</p>',
     TXT: '<p>Hello</p>'
-}
+};
 
 module('Definitions');
 test('wysiwyg defined', function () {
-    ok(typeof jQuery.fn.tinylight !== 'undefined');
+    ok(jQuery.fn.tinylight !== undefined);
 });
 test('cleanupHtml defined', function () {
-    ok(typeof jQuery.mac.tinylight._proto.cleanupHtml !== 'undefined');
+    ok(jQuery.mac.tinylight._proto.cleanupHtml !== undefined);
 });
 
 module('Cleanup');
@@ -55,8 +50,9 @@ test('will remove comments', function () {
 
 module('Word OL lists');
 test('single item', function () {
-    var expected = '<ol><li>Item</li></ol>';
-    var given = WORD_2013.OL.ONE;
+    var expected = '<ol><li>Item</li></ol>',
+        given = WORD_2013.OL.ONE;
+
     check(given, expected);
     check(HTML.P + given, CLEAN.P + expected);
     check(HTML.TXT + given, CLEAN.TXT + expected);
@@ -67,8 +63,9 @@ test('single item', function () {
 });
 
 test('multiple items', function () {
-    var expected = '<ol><li>Item1</li><li>Item2</li></ol>';
-    var given = WORD_2013.OL.TWO;
+    var expected = '<ol><li>Item1</li><li>Item2</li></ol>',
+        given = WORD_2013.OL.TWO;
+
     check(given, expected);
     check(HTML.P + given, CLEAN.P + expected);
     check(HTML.TXT + given, CLEAN.TXT + expected);
@@ -79,8 +76,9 @@ test('multiple items', function () {
 });
 
 test('indented lists', function () {
-    var expected = '<ol><li>Item1</li><li>Item1.1</li></ol>';
-    var given = WORD_2013.OL.TREE;
+    var expected = '<ol><li>Item1</li><li>Item1.1</li></ol>',
+        given = WORD_2013.OL.TREE;
+
     check(given, expected);
     check(HTML.P + given, CLEAN.P + expected);
     check(HTML.TXT + given, CLEAN.TXT + expected);
@@ -92,8 +90,9 @@ test('indented lists', function () {
 
 module('Word UL lists');
 test('single item', function () {
-    var expected = '<ul><li>Item</li></ul>';
-    var given = WORD_2013.UL.ONE;
+    var expected = '<ul><li>Item</li></ul>',
+        given = WORD_2013.UL.ONE;
+
     check(given, expected);
     check(HTML.P + given, CLEAN.P + expected);
     check(HTML.TXT + given, CLEAN.TXT + expected);
@@ -104,8 +103,9 @@ test('single item', function () {
 });
 
 test('multiple items', function () {
-    var expected = '<ul><li>Item1</li><li>Item2</li></ul>';
-    var given = WORD_2013.UL.TWO;
+    var expected = '<ul><li>Item1</li><li>Item2</li></ul>',
+        given = WORD_2013.UL.TWO;
+
     check(given, expected);
     check(HTML.P + given, CLEAN.P + expected);
     check(HTML.TXT + given, CLEAN.TXT + expected);
@@ -116,8 +116,9 @@ test('multiple items', function () {
 });
 
 test('indented lists', function () {
-    var expected = '<ul><li>Item1</li><li>Item1.1</li></ul>';
-    var given = WORD_2013.UL.TREE;
+    var expected = '<ul><li>Item1</li><li>Item1.1</li></ul>',
+        given = WORD_2013.UL.TREE;
+
     check(given, expected);
     check(HTML.P + given, CLEAN.P + expected);
     check(HTML.TXT + given, CLEAN.TXT + expected);
@@ -137,7 +138,7 @@ test('lists can not be nested', function () {
     check('<p><p>one</p><ul><li>two</li></ul></p>', '<p>one</p><ul><li>two</li></ul>');
 });
 
-test('lists can have line breaks', function(){
+test('lists can have line breaks', function() {
     check('<ul><li>one<br>two</li></ul>', '<ul><li>one<br>two</li></ul>');
 });
 
@@ -210,7 +211,7 @@ test('fill empty and with br paragraphs and divs with non break space', function
     check('<div><br></div>', '<p>&nbsp;</p>');
 });
 
-test('propertly convert line breaks', function() {
+test('property convert line breaks', function () {
     check('one<div><br></div><div>two</div>', '<p>one</p><p>&nbsp;</p><p>two</p>');
     check('<p>one</p><p>&nbsp;</p><p>two</p>', '<p>one</p><p>&nbsp;</p><p>two</p>');
     check('before<ul><li>item</li></ul><div><br></div>after<br>', '<p>before</p><ul><li>item</li></ul><p>&nbsp;</p><p>after</p>');

@@ -1,0 +1,9 @@
+{
+    "name": "mac.tinylight",
+    "version": "1.0.0",
+    "dependencies": {
+        "jquery-ui": "~1.9.0",
+        "bootstrap": "~2.2.0",
+        "qunit": "~1.10.0"
+    }
+}
