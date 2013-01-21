@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>WYSIWYG</title>
+    <title>Tinylight Demo</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="components/bootstrap/docs/assets/css/bootstrap.css">
-    <link rel="stylesheet" href="css/jquery.mac.tinylight.css">
-    <link rel="stylesheet" href="components/qunit/qunit.css">
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//raw.github.com/mac2000/tinylight/master/css/jquery.mac.tinylight.css">
     <style>
         .container-fluid {
             padding: 20px;
@@ -14,41 +13,58 @@
         textarea {
             margin: 20px 0;
         }
+
+        .span4 > h3 {
+            margin: 0;
+        }
+
+        #preview {
+            font-size: 16px;
+            line-height: 19px;
+            margin-top: 20px;
+            padding: 8px;
+            border: 1px solid #999;
+        }
+
+        #preview p,
+        #preview ul,
+        #preview ol {
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+
+        #preview p {
+            background: #eee;
+        }
+
+        #preview li {
+            background: #ccc;
+        }
     </style>
 </head>
 <body>
 <div class="container-fluid">
     <div class="row-fluid">
-        <div class="span6">
-            <h3>TinyLight Demo</h3>
-            <hr>
+        <div class="span4">
+            <h3>Demo</h3>
             <textarea class="span12" name="txt" id="txt" cols="30" rows="10">Hello World</textarea>
-            <label for="txt">Demo</label>
-
-            <h3>Usage</h3>
-            <hr>
-            <pre><code>$('#txt').tinylight({ updateOnKeyUp: true });</code></pre>
-
-            <h3>Tools</h3>
-            <hr>
-            <a href="word.html">Get html from word</a><br>
-            <a href="tests.html">Tests</a><br>
-            <a href="demo.html">Demo</a><br>
         </div>
-        <div class="span6">
-            <h3>Tests</h3>
-            <hr>
-            <div id="qunit"></div>
+        <div class="span4">
+            <h3>Preview</h3>
+            <div id="preview"></div>
+        </div>
+        <div class="span4">
+            <h3>Code</h3>
+            <pre id="code"></pre>
         </div>
     </div>
 </div>
-<script src="components/qunit/qunit.js"></script>
-<script src="components/jquery/jquery.min.js"></script>
-<script src="components/jquery-ui/ui/jquery.ui.widget.js"></script>
-<script src="js/jquery.mac.tinylight.js"></script>
-<script src="js/tests.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="//raw.github.com/mac2000/tinylight/master/js/jquery.mac.tinylight.min.js"></script>
 <script>
-    jQuery('#txt').tinylight({ updateOnKeyUp: true }).show();
+    var timer;
+    jQuery('#txt').tinylight({ updateOnKeyUp: true });
 </script>
 </body>
 </html>
