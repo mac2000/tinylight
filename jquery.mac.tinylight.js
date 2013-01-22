@@ -22,7 +22,7 @@
             var el,
                 list_items;
 
-            var debug = html == '<font color="#000000" size="3" face="Times New Roman"></font><p style="margin: 0cm 0cm 10pt;" class="MsoNormal"><b style="mso-bidi-font-weight: normal;"><span style="line-height: 115%; font-size: 12pt; mso-bidi-font-size: 11.0pt;"><font color="#000000"><font face="Calibri">EMPLOYERS:<?xml:namespace prefix = o ns = "urn:schemas-microsoft-com:office:office" /><o:p></o:p></font></font></span></b></p><font color="#000000" size="3" face="Times New Roman"></font><p style="margin: 0cm 0cm 10pt 35.7pt; text-indent: -17.85pt; mso-list: l0 level1 lfo1;" class="MsoListParagraph"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">1.</font><span style=\'font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;\'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><font face="Calibri"><font size="3">Increasethe number of job ads for specialists and managers to the level that allowsrabota to outperform competitors;<o:p></o:p></font></font></font></p><font color="#000000" size="3" face="Times New Roman"></font><p style="margin: 0cm 0cm 3pt 35.7pt; text-indent: -17.85pt; mso-list: l0 level1 lfo1;" class="MsoListParagraph"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">2.</font><span style=\'font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;\'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></span><font face="Calibri"><font size="3">Increase employer engagement indicators throughmajor UX improvement. <o:p></o:p></font></font></font></p><font color="#000000" size="3" face="Times New Roman"></font><p style="margin: 0cm 0cm 10pt 35.7pt;" class="MsoListParagraph"><span style="color: rgb(127, 127, 127); mso-themecolor: text1; mso-themetint: 128;"><font size="3"><font face="Calibri">Indicators include: adding new jobposting, processing applications, CV Search<o:p></o:p></font></font></span></p><font color="#000000" size="3" face="Times New Roman"></font><p style="margin: 0cm 0cm 10pt 35.7pt; text-indent: -17.85pt; mso-list: l0 level1 lfo1;" class="MsoListParagraph"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">3.</font><span style=\'font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;\'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><font face="Calibri"><font size="3">Increasethe number of active clients serviced through Sales Force by 25% from 1.000 to 1.250(5* companies – from 600 to 700); increase the number of clients in the regionsby 50%.<o:p></o:p></font></font></font></p><font color="#000000" size="3" face="Times New Roman"></font><p style="margin: 0cm 0cm 10pt 35.7pt; text-indent: -17.85pt; mso-list: l0 level1 lfo1;" class="MsoListParagraph"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">4.</font><span style=\'font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;\'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><font face="Calibri"><font size="3">Increasethe number of eCommerce orders from 40 to 100 per month; add Hot Jobs and CVDBto the products offered through eCommerce; implement alternative paymentmethods.<o:p></o:p></font></font></font></p><font color="#000000" size="3" face="Times New Roman"></font><p style="margin: 0cm 0cm 10pt 35.7pt; text-indent: -17.85pt; mso-list: l0 level1 lfo1;" class="MsoListParagraph"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">5.</font><span style=\'font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;\'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><font size="3"><font face="Calibri">ImproveCC service to SMBs (response within 4 hours, telephone support, active CCtargeting companies that post good quality ads).<o:p></o:p></font></font></font></p><font color="#000000" size="3" face="Times New Roman"></font>';
+            var debug = html == '<b style="color: rgb(255, 255, 255); font-family: Arial; font-size: 13px; background-color: rgb(170, 15, 19);">Обязанности</b><br style="color: rgb(255, 255, 255); font-family: Arial; font-size: 13px; background-color: rgb(170, 15, 19);"><ul style="margin-bottom: 0px; margin-left: 0px; padding-right: 15px; padding-left: 15px; color: rgb(255, 255, 255); font-family: Arial; font-size: 13px; background-color: rgb(170, 15, 19);"><li style="list-style-position: inside;"><span style="font-family: Helv; color: black; font-size: 10pt;"><span style="font-family: Arial;">Увеличение уровня и объёмов продаж в альтернативных каналах (АПП, дилеры, М2М);</span></span></li></ul>';
 
             html = html.replace(/\u2122/g, 'TM').replace(/\u2026/g, '...').replace(/\x93|\x94|\u201c|\u201d/g, '"').replace(/\x60|\x91|\x92|\u2018|\u2019/g, "'").replace(/\u2013|\u2014|\u2015|\u2212/g, '-');
 
@@ -43,6 +43,7 @@
 
             el.children('br').filter(function () { return !this.parentNode || this.parentNode.nodeName !== 'li'; }).remove(); // remove all <br> except thous who in <li>
             $('*').filter(function () { return this.nodeType === 3 && /\s+/.test(this.nodeValue); }).remove(); // remove empty text nodes
+
             el.contents().filter(function () { return this.nodeType === 3; }).wrap('<p />'); // wrap text nodes in paragraphs
 
             // Word lists
@@ -50,13 +51,18 @@
                 return (new RegExp('mso-list', 'gi')).test($(item).attr('style'));
             });
             $.each(list_items, function (index, item) {
-                var content,
+                var $content,
                     tagName = /^[0-9a-np-z]/i.test($.trim($(item).text()).replace(/(&lt;|<)!--\[if !supportLists\]--(&gt;|>)/gi, '')) ? 'ol' : 'ul';
                 item.innerHTML = item.innerHTML.replace(new RegExp('(&lt;|<)!--\\[if !supportLists\\]--(&gt;|>).+\\1!--\\[endif\\]--\\2', 'gi'), '');
-                content = $(item).find('span[lang]:first').size() > 0 ? $(item).find('span[lang]:first').html() : $(item).html();
-                $(item).replaceWith('<' + tagName + '><li>' + content + '</li></' + tagName + '>');
+                $content = $(item).find('span[lang]:first').size() > 0 ? $(item).find('span[lang]:first') : $(item);
+
+                // Remove mso spans with &nbsp;'es
+                $('span', $content).filter(function (index, item) {
+                    return (new RegExp('mso', 'gi')).test($(item).attr('style'));
+                }).remove();
+
+                $(item).replaceWith('<' + tagName + '><li>' + $content.html() + '</li></' + tagName + '>');
             });
-            el.html(el.html().replace(/<\/(ol|ul)>\s*<\1>/gi, ''));
 
             // Nested lists
             list_items = $('li', el).filter(function (index, item) { return $(item).find('ul, ol').size() > 0; });
@@ -134,6 +140,7 @@
                     start = start + '<u>';
                     end = '</u>' + end;
                 }
+                $('span', item).contents().unwrap();
                 $(item).replaceWith(start + $(item).html() + end);
             });
             // IE 9, got after test <b><i>span</i></b><i></i> - removing empty nodes
@@ -144,6 +151,14 @@
             $('div', el).replaceWith(function () {
                 return '<p>' + $(this).html() + '</p>';
             });
+
+            // Remove repeated tags like: <b>H</b><b>ello</b>
+            $('b, i, u, ol, ul', el).filter(function(){ return this.nextSibling && this.tagName === this.nextSibling.tagName; }).each(function(){
+                $(this.nextSibling).prepend($(this).contents());
+                $(this).remove();
+            });
+
+            $(el).contents().filter(function() { return this.nodeType === 1 && -1 === jQuery.inArray(this.tagName.toLowerCase(), ['p', 'div', 'ul', 'ol', 'table', 'li']); }).wrap('<p />'); // wrap non block tags into paragraphs
 
             jQuery('*:not(b, i, u, ol, ul, li, p, br)', el).remove(); // remove not allowed tags
 
@@ -159,15 +174,15 @@
             });
 
             // Trim tag contents
-            $(el).contents().each(function(){
+            $('*', el).each(function(){
                 $(this).html($.trim($(this).html()));
             });
 
             html = el.html();
 
-            html = html.replace(/<\/(b|i|u|ol|ul)>\s*<\1>/gi, ''); // Remove repeated tags like: <b>H</b><b>ello</b>
+            //html = html.replace(/<\/(b|i|u|ol|ul)>\s*<\1>/gi, ''); // Remove repeated tags like: <b>H</b><b>ello</b>
             html = html.replace(/>\s+</g, '><'); // IE 8 fix, he had added some strange symbols not \r\n and not \n
-
+            console.log('cleaned up');
             return html;
         },
         setHtml: function (html) {
@@ -307,15 +322,17 @@
                 //text nodes replaced by P
                 if (e.keyCode !== 8 && e.keyCode !== 17 && e.keyCode !== 46 && e.keyCode !== 224 && !e.metaKey && !e.ctrlKey) {
                     container = self._selectedNode();
-                    name = container.tagName.toLowerCase();
+                    if(container){
+                        name = container.tagName.toLowerCase();
 
-                    //fix forbidden main containers
-                    if (name === "strong" || name === "b" || name === "em" || name === "i" || name === "sub" || name === "sup" || name === "a") {
-                        name = container.parentNode.tagName.toLowerCase();
-                    }
+                        //fix forbidden main containers
+                        if (name === "strong" || name === "b" || name === "em" || name === "i" || name === "sub" || name === "sup" || name === "a") {
+                            name = container.parentNode.tagName.toLowerCase();
+                        }
 
-                    if (name === 'body' || name === 'div' || name === 'p') {
-                        self.doc.execCommand('FormatBlock', false, self.options.blockTag);
+                        if (name === 'body' || name === 'div' || name === 'p') {
+                            self.doc.execCommand('FormatBlock', false, self.options.blockTag);
+                        }
                     }
                 }
 
