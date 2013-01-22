@@ -178,14 +178,22 @@ test('lists can have line breaks', function() {
 
 module('Html other');
 test('replace long tags with short', function () {
-    check('<strong>Item</strong>', '<b>Item</b>');
-    check('<em>Item</em>', '<i>Item</i>');
+    check('<strong>Item</strong>', '<p><b>Item</b></p>');
+    check('<em>Item</em>', '<p><i>Item</i></p>');
 });
 
 test('unwrap font tags', function () {
     check('<p><font face="Arial">hello</font></p>', '<p>hello</p>');
     check('<p><b><font face="Arial">hello</font></b></p>', '<p><b>hello</b></p>');
     check('<p><font face="Arial"><b>hello</b></font></p>', '<p><b>hello</b></p>');
+});
+
+test('unwrap span tags', function () {
+    check('<p><span style="color:red">hello</span></p>', '<p>hello</p>');
+    check('<p><b><span style="color:red">hello</span></b></p>', '<p><b>hello</b></p>');
+    check('<p><span style="color:red"><b>hello</b></span></p>', '<p><b>hello</b></p>');
+
+    check('<p><span style="color:red"><span style="font-weight:bold">hello</span></span></p>', '<p>hello</p>');
 });
 
 test('replace headers', function () {
@@ -198,21 +206,28 @@ test('replace headers', function () {
 });
 
 test('convert spans with styles to allowed tags', function () {
-    check('<span style="font-weight:bold">span</span>', '<b>span</b>');
-    check('<span style="font-style:italic">span</span>', '<i>span</i>');
-    check('<span style="text-decoration:underline">span</span>', '<u>span</u>');
-    check('<span style="font-weight:bold;font-style:italic">span</span>', '<b><i>span</i></b>');
-    check('<span style="font-weight:bold;text-decoration:underline">span</span>', '<b><u>span</u></b>');
-    check('<span style="font-weight:bold;font-style:italic;text-decoration:underline">span</span>', '<b><i><u>span</u></i></b>');
-    check('<span style="font-style:italic;text-decoration:underline">span</span>', '<i><u>span</u></i>');
+    check('<span style="font-weight:bold">span</span>', '<p><b>span</b></p>');
+    check('<span style="font-style:italic">span</span>', '<p><i>span</i></p>');
+    check('<span style="text-decoration:underline">span</span>', '<p><u>span</u></p>');
+    check('<span style="font-weight:bold;font-style:italic">span</span>', '<p><b><i>span</i></b></p>');
+    check('<span style="font-weight:bold;text-decoration:underline">span</span>', '<p><b><u>span</u></b></p>');
+    check('<span style="font-weight:bold;font-style:italic;text-decoration:underline">span</span>', '<p><b><i><u>span</u></i></b></p>');
+    check('<span style="font-style:italic;text-decoration:underline">span</span>', '<p><i><u>span</u></i></p>');
+});
+
+test('will wrap b, i, u with paragraph', function () {
+    check('<b>hello</b>', '<p><b>hello</b></p>');
+    //check('<i>hello</i>', '<p><i>hello</i></p>');
+    //check('<u>hello</u>', '<p><u>hello</u></p>');
+    //check('<b><i>hello</i></b>', '<p><b><i>hello</i></b></p>');
 });
 
 test('will not nest duplicate tags', function () {
-    check('<b><span style="font-weight:bold">span</span></b>', '<b>span</b>');
-    check('<i><span style="font-style:italic">span</span></i>', '<i>span</i>');
-    check('<u><span style="text-decoration:underline">span</span></u>', '<u>span</u>');
-    check('<b><span style="font-weight:bold;font-style:italic">span</span></b>', '<b><i>span</i></b>');
-    check('<b><span style="font-weight:bold;text-decoration:underline">span</span></b>', '<b><u>span</u></b>');
+    check('<b><span style="font-weight:bold">span</span></b>', '<p><b>span</b></p>');
+    check('<i><span style="font-style:italic">span</span></i>', '<p><i>span</i></p>');
+    check('<u><span style="text-decoration:underline">span</span></u>', '<p><u>span</u></p>');
+    check('<b><span style="font-weight:bold;font-style:italic">span</span></b>', '<p><b><i>span</i></b></p>');
+    check('<b><span style="font-weight:bold;text-decoration:underline">span</span></b>', '<p><b><u>span</u></b></p>');
 });
 
 test('remove paragrahs and divs', function () {
@@ -234,15 +249,24 @@ test('remove not allowed tags', function () {
 });
 
 test('remove tag attributes', function () {
-    check('<b style="font-size:12px">b</b>', '<b>b</b>');
-    check('<b class="loud" style="font-size:12px">b</b>', '<b>b</b>');
-    check('<b data-bind="text: name">b</b>', '<b>b</b>');
+    check('<b style="font-size:12px">b</b>', '<p><b>b</b></p>');
+    check('<b class="loud" style="font-size:12px">b</b>', '<p><b>b</b></p>');
+    check('<b data-bind="text: name">b</b>', '<p><b>b</b></p>');
 });
 
 test('combine repeated tags', function () {
-    check('<b>H</b><b>ello</b>', '<b>Hello</b>');
-    check('<i>H</i><i>ello</i>', '<i>Hello</i>');
-    check('<u>H</u><u>ello</u>', '<u>Hello</u>');
+    check('<b>H</b><b>ello</b>', '<p><b>Hello</b></p>');
+    check('<i>H</i><i>ello</i>', '<p><i>Hello</i></p>');
+    check('<u>H</u><u>ello</u>', '<p><u>Hello</u></p>');
+    check('<b>H</b><b>ell</b><b>o</b>', '<p><b>Hello</b></p>');
+
+    check('<ul><li><b>H</b><b>ello</b></li></ul><ul><li>World</li></ul>', '<ul><li><b>Hello</b></li><li>World</li></ul>');
+
+    check('<ul><li>1</li></ul><ul><li>2</li></ul>', '<ul><li>1</li><li>2</li></ul>');
+    check('<ul><li>1</li></ul><ul><li>2</li></ul><ul><li>3</li></ul>', '<ul><li>1</li><li>2</li><li>3</li></ul>');
+
+    check('<ol><li>1</li></ol><ol><li>2</li></ol>', '<ol><li>1</li><li>2</li></ol>');
+    check('<ol><li>1</li></ol><ol><li>2</li></ol><ol><li>3</li></ol>', '<ol><li>1</li><li>2</li><li>3</li></ol>');
 });
 
 test('fill empty and with br paragraphs and divs with non break space', function() {
@@ -273,7 +297,10 @@ test('real world tests', function () {
           '<p><b>EMPLOYERS:</b></p><ol><li>Increasethe number of job ads for specialists and managers to the level that allowsrabota to outperform competitors;</li><li>Increase employer engagement indicators throughmajor UX improvement. </li></ol><p>Indicators include: adding new jobposting, processing applications, CV Search</p><ol><li>Increasethe number of active clients serviced through Sales Force by 25% from 1.000 to 1.250(5* companies - from 600 to 700); increase the number of clients in the regionsby 50%.</li><li>Increasethe number of eCommerce orders from 40 to 100 per month; add Hot Jobs and CVDBto the products offered through eCommerce; implement alternative paymentmethods.</li><li>ImproveCC service to SMBs (response within 4 hours, telephone support, active CCtargeting companies that post good quality ads).</li></ol>');
 
     check('<b style="color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-size: 16px; line-height: normal;"><u>Our Requirements</u></b><p style="margin-top: 2px; margin-bottom: 2px; background-color: rgb(238, 238, 238); color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-size: 16px; line-height: normal;"><b>Mandatory:</b></p><p style="margin-top: 2px; margin-bottom: 2px; background-color: rgb(238, 238, 238); color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-size: 16px; line-height: normal;"></p><ul style="margin-top: 2px; margin-bottom: 2px; margin-left: 0px; padding-left: 40px;"><li style="background-color: rgb(204, 204, 204); background-position: initial initial; background-repeat: initial initial;">Knowledge of accounting principles</li></ul><li style="background-color: rgb(204, 204, 204); background-position: initial initial; background-repeat: initial initial;">Good knowledge of MS Excel</li><li style="background-color: rgb(204, 204, 204); background-position: initial initial; background-repeat: initial initial;">Knowledge of 1С: Enterprise 8</li><ul style="margin-top: 2px; margin-bottom: 2px; margin-left: 0px; padding-left: 40px;"><li style="background-color: rgb(204, 204, 204); background-position: initial initial; background-repeat: initial initial;">Knowledge of accounting software or ERP systems, experience in implementing projects is a plus</li></ul><ul style="margin-top: 2px; margin-bottom: 2px; margin-left: 0px; padding-left: 40px;"><li style="background-color: rgb(204, 204, 204); background-position: initial initial; background-repeat: initial initial;">Professional certification is a plus</li></ul><ul style="margin-top: 2px; margin-bottom: 2px; margin-left: 0px; padding-left: 40px;"><li style="background-color: rgb(204, 204, 204); background-position: initial initial; background-repeat: initial initial;">Good command of spoken and written English, Ukrainian and Russian</li></ul><li style="background-color: rgb(204, 204, 204); background-position: initial initial; background-repeat: initial initial;">Positive attitude, excellent communication and interpersonal skilllated to</li>',
-          '<b><u>Our Requirements</u></b><p><b>Mandatory:</b></p><p>&nbsp;</p><ul><li>Knowledge of accounting principles</li><li>Good knowledge of MS Excel</li><li>Knowledge of 1С: Enterprise 8</li><li>Knowledge of accounting software or ERP systems, experience in implementing projects is a plus</li><li>Professional certification is a plus</li><li>Good command of spoken and written English, Ukrainian and Russian</li><li>Positive attitude, excellent communication and interpersonal skilllated to</li></ul>');
+          '<p><b><u>Our Requirements</u></b></p><p><b>Mandatory:</b></p><p>&nbsp;</p><ul><li>Knowledge of accounting principles</li><li>Good knowledge of MS Excel</li><li>Knowledge of 1С: Enterprise 8</li><li>Knowledge of accounting software or ERP systems, experience in implementing projects is a plus</li><li>Professional certification is a plus</li><li>Good command of spoken and written English, Ukrainian and Russian</li><li>Positive attitude, excellent communication and interpersonal skilllated to</li></ul>');
+
+    check('<b style="color: rgb(255, 255, 255); font-family: Arial; font-size: 13px; background-color: rgb(170, 15, 19);">Обязанности</b><br style="color: rgb(255, 255, 255); font-family: Arial; font-size: 13px; background-color: rgb(170, 15, 19);"><ul style="margin-bottom: 0px; margin-left: 0px; padding-right: 15px; padding-left: 15px; color: rgb(255, 255, 255); font-family: Arial; font-size: 13px; background-color: rgb(170, 15, 19);"><li style="list-style-position: inside;"><span style="font-family: Helv; color: black; font-size: 10pt;"><span style="font-family: Arial;">Увеличение уровня и объёмов продаж в альтернативных каналах (АПП, дилеры, М2М);</span></span></li></ul>',
+          '<p><b>Обязанности</b></p><ul><li>Увеличение уровня и объёмов продаж в альтернативных каналах (АПП, дилеры, М2М);</li></ul>');
 });
 
 /* TEST CASE EXAMPLE
