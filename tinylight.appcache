@@ -1,12 +1,12 @@
 CACHE MANIFEST
-# 2013-01-21:v1.1
+# 2013-01-21:v1.2
 index.html
 http://netdna.bootstrapcdn.com/twitter-bootstrap/latest/css/bootstrap-combined.min.css
 http://mac-blog.org.ua/tinylight/jquery.mac.tinylight.css
 
 http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js
 http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js
-http://mac-blog.org.ua/tinylight/jquery.mac.tinylight.min.js
+http://mac-blog.org.ua/tinylight/jquery.mac.tinylight.js
 
 FALLBACK:
 / /index.html
