@@ -21,7 +21,7 @@
         #preview {
             font-size: 16px;
             line-height: 19px;
-            margin-top: 20px;
+            margin-top: 30px;
             padding: 8px;
             border: 1px solid #999;
         }
@@ -45,7 +45,7 @@
 <body>
 <div class="container-fluid">
     <div class="row-fluid">
-        <div class="span4">
+        <div style="float:left;width:500px;">
             <h3>Demo</h3>
             <textarea class="span12" name="txt" id="txt" cols="30" rows="10">Hello World</textarea>
             <label for="txt">Demo</label>
@@ -61,14 +61,13 @@
                 </div>
             </form>
         </div>
-        <div class="span4">
+        <div style="float:left;margin-left:1em">
             <h3>Preview</h3>
 
-            <div id="preview"></div>
-        </div>
-        <div class="span4">
+            <div id="preview" style="width:718px"></div>
+
             <h3>Code</h3>
-            <pre id="code"></pre>
+            <pre id="code" style="width:500px;"></pre>
             <a id="stop" href="#" class="btn btn-block">Stop updating</a>
             <a id="resume" href="#" class="btn btn-block">Resume updating</a>
         </div>

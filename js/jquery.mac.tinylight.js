@@ -22,6 +22,8 @@
             var el,
                 list_items;
 
+            var debug = html == '<font color="#000000" size="3" face="Times New Roman"></font><p style="margin: 0cm 0cm 10pt;" class="MsoNormal"><b style="mso-bidi-font-weight: normal;"><span style="line-height: 115%; font-size: 12pt; mso-bidi-font-size: 11.0pt;"><font color="#000000"><font face="Calibri">EMPLOYERS:<?xml:namespace prefix = o ns = "urn:schemas-microsoft-com:office:office" /><o:p></o:p></font></font></span></b></p><font color="#000000" size="3" face="Times New Roman"></font><p style="margin: 0cm 0cm 10pt 35.7pt; text-indent: -17.85pt; mso-list: l0 level1 lfo1;" class="MsoListParagraph"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">1.</font><span style=\'font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;\'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><font face="Calibri"><font size="3">Increasethe number of job ads for specialists and managers to the level that allowsrabota to outperform competitors;<o:p></o:p></font></font></font></p><font color="#000000" size="3" face="Times New Roman"></font><p style="margin: 0cm 0cm 3pt 35.7pt; text-indent: -17.85pt; mso-list: l0 level1 lfo1;" class="MsoListParagraph"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">2.</font><span style=\'font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;\'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></span><font face="Calibri"><font size="3">Increase employer engagement indicators throughmajor UX improvement. <o:p></o:p></font></font></font></p><font color="#000000" size="3" face="Times New Roman"></font><p style="margin: 0cm 0cm 10pt 35.7pt;" class="MsoListParagraph"><span style="color: rgb(127, 127, 127); mso-themecolor: text1; mso-themetint: 128;"><font size="3"><font face="Calibri">Indicators include: adding new jobposting, processing applications, CV Search<o:p></o:p></font></font></span></p><font color="#000000" size="3" face="Times New Roman"></font><p style="margin: 0cm 0cm 10pt 35.7pt; text-indent: -17.85pt; mso-list: l0 level1 lfo1;" class="MsoListParagraph"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">3.</font><span style=\'font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;\'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><font face="Calibri"><font size="3">Increasethe number of active clients serviced through Sales Force by 25% from 1.000 to 1.250(5* companies – from 600 to 700); increase the number of clients in the regionsby 50%.<o:p></o:p></font></font></font></p><font color="#000000" size="3" face="Times New Roman"></font><p style="margin: 0cm 0cm 10pt 35.7pt; text-indent: -17.85pt; mso-list: l0 level1 lfo1;" class="MsoListParagraph"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">4.</font><span style=\'font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;\'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><font face="Calibri"><font size="3">Increasethe number of eCommerce orders from 40 to 100 per month; add Hot Jobs and CVDBto the products offered through eCommerce; implement alternative paymentmethods.<o:p></o:p></font></font></font></p><font color="#000000" size="3" face="Times New Roman"></font><p style="margin: 0cm 0cm 10pt 35.7pt; text-indent: -17.85pt; mso-list: l0 level1 lfo1;" class="MsoListParagraph"><font color="#000000"><span style="mso-bidi-font-family: Calibri; mso-bidi-theme-font: minor-latin;"><span style="mso-list: Ignore;"><font size="3" face="Calibri">5.</font><span style=\'font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;\'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><font size="3"><font face="Calibri">ImproveCC service to SMBs (response within 4 hours, telephone support, active CCtargeting companies that post good quality ads).<o:p></o:p></font></font></font></p><font color="#000000" size="3" face="Times New Roman"></font>';
+
             html = html.replace(/\u2122/g, 'TM').replace(/\u2026/g, '...').replace(/\x93|\x94|\u201c|\u201d/g, '"').replace(/\x60|\x91|\x92|\u2018|\u2019/g, "'").replace(/\u2013|\u2014|\u2015|\u2212/g, '-');
 
             // some basic replacements, we are:
@@ -29,20 +31,19 @@
             // removing all non printable space characters
             // removing spaces between tags
             // converting all <br> tags to same format
-            html = html.replace(/\s+/g, ' ').replace(/[\t\r\n\n]+/g, '').replace(/>\s+</g, '><').replace(/<br\s*\/?>/gi, '<br>');
+            html = html.replace(/\s+/g, ' ').replace(/[\t\r\n\n]+/g, '').replace(/>\s+</g, '><').replace(/<br\s*\/?>/gi, '<br>').replace(/<\/?font[^>]*>/gi, '');
 
-            html = html.replace(/<(div|p)>(<br>)?<\/\1>/gi, '<p>&nbsp;</p>'); // Convert all kind of empty lines to <p>&nbsp;</p>
+            html = html.replace(/<(div|p)[^>]*>(<br>)?<\/\1>/gi, '<p>&nbsp;</p>'); // Convert all kind of empty lines to <p>&nbsp;</p>
             html = html.replace(/<(div|p)><(ul|ol)>/gi, '<$2>').replace(/<\/(ul|ol)><\/(div|p)>/gi, '</$1>'); // lists can not be nested
-
 
             el = $('<div>').html(html);
             while ($('*:empty:not(br)', el).size() > 0) {
                 $('*:empty:not(br)', el).remove(); // remove empty non <br> nodes
             }
+
             el.children('br').filter(function () { return !this.parentNode || this.parentNode.nodeName !== 'li'; }).remove(); // remove all <br> except thous who in <li>
             $('*').filter(function () { return this.nodeType === 3 && /\s+/.test(this.nodeValue); }).remove(); // remove empty text nodes
             el.contents().filter(function () { return this.nodeType === 3; }).wrap('<p />'); // wrap text nodes in paragraphs
-            el.contents().filter(function () { return this.nodeType === 8; }).remove(); // remove comments
 
             // Word lists
             list_items = $('p', el).filter(function (index, item) {
@@ -55,7 +56,7 @@
                 content = $(item).find('span[lang]:first').size() > 0 ? $(item).find('span[lang]:first').html() : $(item).html();
                 $(item).replaceWith('<' + tagName + '><li>' + content + '</li></' + tagName + '>');
             });
-            el.html(el.html().replace(/<\/(o|u)l>\s*<(o|u)l>/gi, ''));
+            el.html(el.html().replace(/<\/(ol|ul)>\s*<\1>/gi, ''));
 
             // Nested lists
             list_items = $('li', el).filter(function (index, item) { return $(item).find('ul, ol').size() > 0; });
@@ -70,6 +71,40 @@
                     $(parent).replaceWith($(parent).html());
                 }
             });
+
+            // Fix broken lists
+            // <li> items after <ul> or <ol>
+            do {
+                list_items = $('li', el).filter(function(){
+                    return this.parentNode.tagName.toLowerCase() !== 'ul' &&
+                        this.parentNode.tagName.toLowerCase() !== 'ol' &&
+                        this.previousSibling && (
+                            this.previousSibling.tagName.toLowerCase() === 'ul' || this.previousSibling.tagName.toLowerCase() === 'ol'
+                        );
+                });
+
+                list_items.each(function () { $(this).appendTo($(this).prev('ul, ol')); });
+            } while(list_items.size() > 0);
+
+            // <li> items before <ul> or <ol>
+            do {
+                list_items = $('li', el).filter(function(){
+                    return this.parentNode.tagName.toLowerCase() !== 'ul' &&
+                        this.parentNode.tagName.toLowerCase() !== 'ol' &&
+                        this.nextSibling && (
+                            this.nextSibling.tagName.toLowerCase() === 'ul' || this.nextSibling.tagName.toLowerCase() === 'ol'
+                        );
+                });
+
+                list_items.each(function () { $(this).prependTo($(this).next('ul, ol')); });
+            } while(list_items.size() > 0);
+
+
+
+            // Remove comments after dealing with lists
+            $('*', el).contents().filter(function () { return this.nodeType == 8; }).remove(); // remove comments
+            el.contents().filter(function () { return this.nodeType == 8; }).remove(); // remove comments
+
 
             // Replace long tags to short
             $('strong', el).replaceWith(function () {
@@ -123,11 +158,15 @@
                 }
             });
 
+            // Trim tag contents
+            $(el).contents().each(function(){
+                $(this).html($.trim($(this).html()));
+            });
+
             html = el.html();
 
-            html = html.replace(/<\/(b|i|u)>\s*<\1>/gi, ''); // Remove repeated tags like: <b>H</b><b>ello</b>
+            html = html.replace(/<\/(b|i|u|ol|ul)>\s*<\1>/gi, ''); // Remove repeated tags like: <b>H</b><b>ello</b>
             html = html.replace(/>\s+</g, '><'); // IE 8 fix, he had added some strange symbols not \r\n and not \n
-            html = html.replace(/\s*(<\/?\w+>)\s*/g, '$1'); // Trim tag contents
 
             return html;
         },
