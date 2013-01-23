@@ -182,7 +182,6 @@
 
             //html = html.replace(/<\/(b|i|u|ol|ul)>\s*<\1>/gi, ''); // Remove repeated tags like: <b>H</b><b>ello</b>
             html = html.replace(/>\s+</g, '><'); // IE 8 fix, he had added some strange symbols not \r\n and not \n
-            console.log('cleaned up');
             return html;
         },
         setHtml: function (html) {
@@ -221,7 +220,11 @@
             button = $('<span class="mac-tinylight-toolbar-button" data-command="' + command + '" unselectable="on">' + command + '</span>').appendTo(self.toolbar);
             button.on('mousedown', function (e) { // must be mousedown, not click, otherwise it will not work in Firefox, because before click, text in edit area is unselected
                 e.preventDefault();
+                var wrap_with_p = ((command === 'InsertUnorderedList' || command === 'InsertOrderedList') && self.doc.queryCommandState(command));
                 self.doc.execCommand(command);
+                if(wrap_with_p) {
+                    self.doc.execCommand('FormatBlock', false, self.options.blockTag); //wrap with <p>
+                }
                 self._updateToolbar();
                 return false;
             });
