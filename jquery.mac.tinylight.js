@@ -188,6 +188,7 @@
             html = this.cleanupHtml(html);
             this.doc.body.innerHTML = html;
             this.element.val(html);
+            this.element.trigger('change');
         },
         getHtml: function () {
             return this.doc.body.innerHTML;
