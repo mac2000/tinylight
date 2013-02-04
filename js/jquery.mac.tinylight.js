@@ -363,6 +363,11 @@
 
             $(navigator.userAgent.match(/MSIE/) ? self.doc : self.wnd).on('blur deactivate', function () {
                 self.setHtml(self.getHtml());
+                self.element.trigger('blur');
+            });
+
+            $(navigator.userAgent.match(/MSIE/) ? self.doc : self.wnd).on('focus activate', function () {
+                self.element.trigger('focus');
             });
 
             self.holder.show();

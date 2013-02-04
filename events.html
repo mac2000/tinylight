@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>events</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="components/bootstrap/docs/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="css/jquery.mac.tinylight.css">
+    <link rel="stylesheet" href="components/qunit/qunit.css">
+    <style>
+        .container-fluid {
+            padding: 20px;
+        }
+
+        textarea {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span6">
+            <h3>TinyLight Demo</h3>
+            <textarea class="span12" name="txt" id="txt" cols="30" rows="10">Hello World</textarea>
+        </div>
+        <div class="span6">
+            <h3>Events</h3>
+            <div class="well" id="log"></div>
+        </div>
+    </div>
+</div>
+<script src="components/jquery/jquery.min.js"></script>
+<script src="components/jquery-ui/ui/jquery.ui.widget.js"></script>
+<script src="js/jquery.mac.tinylight.js"></script>
+<script>
+    var log = jQuery('#log'),
+        txt = jQuery('#txt').tinylight().show().on('focus blur change', function(e){
+            log.append('<div>' + e.type + '</div>');
+        });
+</script>
+</body>
+</html>
