@@ -35,6 +35,7 @@
 <script>
     var log = jQuery('#log'),
         txt = jQuery('#txt').tinylight().show().on('focus blur change', function(e){
+            e.preventDefault();
             log.append('<div>' + e.type + '</div>');
         });
 </script>

@@ -347,6 +347,7 @@
             });
 
             // On any change, check how much is changed and if it is greater than limit run cleanup
+            self.wasLength = self.doc.body.innerHTML.length;
             $(self.doc).on('keyup mouseup', function (e) {
                 self._updateToolbar();
 
