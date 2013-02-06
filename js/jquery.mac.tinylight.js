@@ -187,7 +187,7 @@
         setHtml: function (html) {
             html = this.cleanupHtml(html);
             this.doc.body.innerHTML = html;
-            this.element.val(html);
+            this.element.val(html == '<p>&nbsp;</p>' ? '' : html);
             this.element.trigger('change');
         },
         getHtml: function () {
