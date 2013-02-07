@@ -349,6 +349,11 @@
             // On any change, check how much is changed and if it is greater than limit run cleanup
             self.wasLength = self.doc.body.innerHTML.length;
             $(self.doc).on('keyup mouseup', function (e) {
+                var container = self._selectedNode();
+                if(container && 'p' === container.tagName.toLowerCase() && '&nbsp;' === container.innerHTML) {
+                    container.innerHTML = '<br>';
+                }
+
                 self._updateToolbar();
 
                 self.nowLength = self.doc.body.innerHTML.length;
