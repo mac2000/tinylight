@@ -31,7 +31,8 @@
             // removing all non printable space characters
             // removing spaces between tags
             // converting all <br> tags to same format
-            html = html.replace(/\s+/g, ' ').replace(/[\t\r\n\n]+/g, '').replace(/>\s+</g, '><').replace(/<br\s*\/?>/gi, '<br>').replace(/<\/?font[^>]*>/gi, '');
+            // removing <o:p></o:p>
+            html = html.replace(/\s+/g, ' ').replace(/[\t\r\n\n]+/g, '').replace(/>\s+</g, '><').replace(/<br\s*\/?>/gi, '<br>').replace(/<\/?font[^>]*>/gi, '').replace(/<\/?o:p>/gi, '');
 
             html = html.replace(/<(div|p)[^>]*>(<br>)?<\/\1>/gi, '<p>&nbsp;</p>'); // Convert all kind of empty lines to <p>&nbsp;</p>
             html = html.replace(/<(div|p)><(ul|ol)>/gi, '<$2>').replace(/<\/(ul|ol)><\/(div|p)>/gi, '</$1>'); // lists can not be nested
