@@ -61,15 +61,25 @@
             });
             $.each(list_items, function (index, item) {
                 var $content,
+                    size = 0,
                     tagName = /^[0-9a-np-z]/i.test($.trim($(item).text()).replace(/(&lt;|<)!--\[if !supportLists\]--(&gt;|>)/gi, '')) ? 'ol' : 'ul';
                 item.innerHTML = item.innerHTML.replace(new RegExp('(&lt;|<)!--\\[if !supportLists\\]--(&gt;|>).+\\1!--\\[endif\\]--\\2', 'gi'), '');
-                $content = $(item).find('span[lang]:first').size() > 0 ? $(item).find('span[lang]:first') : $(item);
+                //$content = $(item).find('span[lang]:first').size() > 0 ? $(item).find('span[lang]:first') : $(item);
+                //$content = $(item).find('span[lang]:first').text().replace(/[^a-zа-я0-9]/gi, '').length > 0 ? $(item).find('span[lang]:first') : $(item);
+                size = $(item).find('span[lang]').size();
+                if(size === 0) {
+                    $content = $(item);
+                } else if(size === 1) {
+                    $content = $(item).find('span[lang]:first');
+                }
+                 else if(size > 1) {
+                    $content = $(item).find('span[lang]:last');
+                }
 
                 // Remove mso spans with &nbsp;'es
                 $('span', $content).filter(function (index, item) {
                     return (new RegExp('mso', 'gi')).test($(item).attr('style'));
                 }).remove();
-
                 $(item).replaceWith('<' + tagName + '><li>' + $content.html() + '</li></' + tagName + '>');
             });
 
