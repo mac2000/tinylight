@@ -179,7 +179,9 @@ test('lists can have line breaks', function() {
 test('paste list from word 2003', function() {
     check('1.<span class="Apple-tab-span" style="white-space:pre"><span style="white-space: normal;">  </span></span>one', '<ol><li>one</li></ol>');
     check('•<span class="Apple-tab-span" style="white-space:pre"><span style="white-space: normal;">   </span></span>hello', '<ul><li>hello</li></ul>');
+    check('<P style="TEXT-ALIGN: justify; TEXT-INDENT: -7.1pt; MARGIN: 0cm 0cm 0pt 42.55pt; mso-list: l0 level1 lfo1; tab-stops: 42.55pt" class=ListParagraph><FONT color=#000000><SPAN style="mso-fareast-font-family: Calibri; mso-ansi-language: RU"><SPAN style="mso-list: Ignore"><FONT size=3 face=Calibri>-</FONT><SPAN style="FONT: 7pt \'Times New Roman\'">&nbsp;&nbsp; </SPAN></SPAN></SPAN><SPAN style="mso-ansi-language: RU"><FONT size=3><FONT face=Calibri>hello <?xml:namespace prefix = o ns = "urn:schemas-microsoft-com:office:office" /><o:p></o:p></FONT></FONT></SPAN></FONT></P>', '<ul><li>hello </li></ul>');
 });
+
 
 
 module('Html other');

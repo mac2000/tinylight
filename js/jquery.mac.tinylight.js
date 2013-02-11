@@ -67,14 +67,18 @@
                 item.innerHTML = item.innerHTML.replace(new RegExp('(&lt;|<)!--\\[if !supportLists\\]--(&gt;|>).+\\1!--\\[endif\\]--\\2', 'gi'), '');
                 //$content = $(item).find('span[lang]:first').size() > 0 ? $(item).find('span[lang]:first') : $(item);
                 //$content = $(item).find('span[lang]:first').text().replace(/[^a-zа-я0-9]/gi, '').length > 0 ? $(item).find('span[lang]:first') : $(item);
-                size = $(item).find('span[lang]').size();
+                size = $(item).children('span[lang]').size();
                 if(size === 0) {
-                    $content = $(item);
+                    if($(item).children('span').size() > 1) {
+                        $content = $(item).children('span:last');
+                    } else {
+                        $content = $(item);
+                    }
                 } else if(size === 1) {
-                    $content = $(item).find('span[lang]:first');
+                    $content = $(item).children('span[lang]:first');
                 }
                  else if(size > 1) {
-                    $content = $(item).find('span[lang]:last');
+                    $content = $(item).children('span[lang]:last');
                 }
 
                 // Remove mso spans with &nbsp;'es
