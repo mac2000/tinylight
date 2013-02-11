@@ -41,7 +41,12 @@
                 $('*:empty:not(br)', el).remove(); // remove empty non <br> nodes
             }
 
-            $('tr, thead, tbody, tfoot, table', el).contents().unwrap(); // unwrap tables and their rows
+            //$('tr, thead, tbody, tfoot, table', el).contents().unwrap(); // must be done by one for IE8
+            $('tr', el).contents().unwrap(); // unwrap tables and their rows
+            $('tfoot', el).contents().unwrap();
+            $('thead', el).contents().unwrap();
+            $('tbody', el).contents().unwrap();
+            $('table', el).contents().unwrap();
             $('td, th', el).each(function(){ $('<p>&nbsp;</p>').insertAfter(this); }); // insert empty paragraph after each cell
             $('td', el).contents().unwrap(); // unpwrap <td> if there is text nodes in them - they should be wrapped with <p> later
 
