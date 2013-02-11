@@ -10,7 +10,7 @@
         doc: undefined,
         buttons: [],
         options: {
-            cleanupLengthTrigger: 100,
+            cleanupLengthTrigger: 200,
             height: 300,
             fontSize: '100%',
             fontFamily: 'Helvetica,Arial,sans-serif',
@@ -40,6 +40,10 @@
             while ($('*:empty:not(br)', el).size() > 0) {
                 $('*:empty:not(br)', el).remove(); // remove empty non <br> nodes
             }
+
+            $('tr, thead, tbody, tfoot, table', el).contents().unwrap(); // unwrap tables and their rows
+            $('td, th', el).each(function(){ $('<p>&nbsp;</p>').insertAfter(this); }); // insert empty paragraph after each cell
+            $('td', el).contents().unwrap(); // unpwrap <td> if there is text nodes in them - they should be wrapped with <p> later
 
             el.children('br').filter(function () { return !this.parentNode || this.parentNode.nodeName !== 'li'; }).remove(); // remove all <br> except thous who in <li>
             $('*').filter(function () { return this.nodeType === 3 && /\s+/.test(this.nodeValue); }).remove(); // remove empty text nodes
@@ -276,7 +280,7 @@
             self.wnd = self.frame.get(0).contentWindow;
             self.doc = self.wnd.document;
             self.doc.open();
-            self.doc.write('<!DOCTYPE html><title></title><meta charset="utf-8"><link rel="stylesheet" href="http://css.cdn.tl/normalize.css"><!--[if lte IE 9]><style>html {height:100%}body{min-height:97%}</style><![endif]--><style>body{margin:.5em;font-family:' + self.options.fontFamily + ';font-size:' + self.options.fontSize + ';background-color:' + self.options.backgroundColor + ';}p,ul,ol{margin:2px 0}p{background:#eee;}li{background:#ccc}</style><body></body>');// + '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>'
+            self.doc.write('<!DOCTYPE html><title></title><meta charset="utf-8"><link rel="stylesheet" href="http://css.cdn.tl/normalize.css"><!--[if lte IE 9]><style>html {height:100%}body{min-height:95%}</style><![endif]--><style>body{margin:.5em;font-family:' + self.options.fontFamily + ';font-size:' + self.options.fontSize + ';background-color:' + self.options.backgroundColor + ';}p,ul,ol{margin:2px 0}p{background:#eee;}li{background:#ccc}</style><body></body>');// + '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>'
             self.doc.close();
 
             self.setHtml($.trim(self.element.val()) === '' ? '<p>&nbsp;</p>' : self.element.val());
