@@ -176,6 +176,12 @@ test('lists can have line breaks', function() {
     check('<ul><li>one<br>two</li></ul>', '<ul><li>one<br>two</li></ul>');
 });
 
+test('paste list from word 2003', function() {
+    check('1.<span class="Apple-tab-span" style="white-space:pre"><span style="white-space: normal;">  </span></span>one', '<ol><li>one</li></ol>');
+    check('•<span class="Apple-tab-span" style="white-space:pre"><span style="white-space: normal;">   </span></span>hello', '<ul><li>hello</li></ul>');
+});
+
+
 module('Html other');
 test('replace long tags with short', function () {
     check('<strong>Item</strong>', '<p><b>Item</b></p>');

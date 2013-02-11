@@ -83,6 +83,56 @@
                 $(item).replaceWith('<' + tagName + '><li>' + $content.html() + '</li></' + tagName + '>');
             });
 
+            // Word 2003 OL list pasted into chrome <p>1.</p><p>hello</p>
+            list_items = $('p', el).filter(function () {
+                var text = '';
+                if(this.previousSibling && this.previousSibling.tagName.toLowerCase() === 'p') {
+                    text = $.trim($(this.previousSibling).text());
+                    return text.match(/^\d+\./);
+                }
+            });
+            $.each(list_items, function () {
+                $(this.previousSibling).remove();
+                $(this).replaceWith('<ol><li>' + $(this).html() + '</li></ol>');
+            });
+
+            // Word 2003 UL list pasted into chrome <p>o</p><p>hello</p>
+            list_items = $('p', el).filter(function () {
+                var text = '';
+                if(this.previousSibling && this.previousSibling.tagName.toLowerCase() === 'p') {
+                    text = $.trim($(this.previousSibling).text());
+                    return -1 !== $.inArray(text, ['&bull;', '&#8226;', '&#x2022;', '%u2022', '%u8226']) || -1 !== $.inArray(escape(text), ['&bull;', '&#8226;', '&#x2022;', '%u2022', '%u8226']);
+                }
+            });
+            $.each(list_items, function () {
+                $(this.previousSibling).remove();
+                $(this).replaceWith('<ul><li>' + $(this).html() + '</li></ul>');
+            });
+
+            // Word 2003 OL list in IE8 <p>1.hello</p>
+            list_items = $('p', el).filter(function () {
+                var text = $.trim($(this).text());
+                return text.match(/^\d+./);
+            });
+            $.each(list_items, function () {
+                var text = $.trim($(this).html());
+                text = text.replace(/^\d+./, '');
+                $(this).replaceWith('<ol><li>' + text + '</li></ol>');
+            });
+
+            // Word 2003 UL list in IE8 <p>ohello</p>
+            list_items = $('p', el).filter(function () {
+                var text = $.trim($(this).text());
+                return text.match(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226)/) || escape(text).match(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226)/);
+            });
+            $.each(list_items, function () {
+                var text = $.trim($(this).html());
+                text = text.replace(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226)/i, '');
+                text = unescape(escape(text).replace(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226)/i, ''));
+
+                $(this).replaceWith('<ul><li>' + text + '</li></ul>');
+            });
+
             // Nested lists
             list_items = $('li', el).filter(function (index, item) { return $(item).find('ul, ol').size() > 0; });
             list_items.each(function (index, item) {
