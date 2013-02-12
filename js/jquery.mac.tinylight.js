@@ -42,6 +42,8 @@
                 $('*:empty:not(br)', el).remove(); // remove empty non <br> nodes
             }
 
+            $('a', el).contents().unwrap(); // unwrap anchors
+
             //$('tr, thead, tbody, tfoot, table', el).contents().unwrap(); // must be done by one for IE8
             $('tr', el).contents().unwrap(); // unwrap tables and their rows
             $('tfoot', el).contents().unwrap();
@@ -117,11 +119,11 @@
             // Word 2003 OL list in IE8 <p>1.hello</p>
             list_items = $('p', el).filter(function () {
                 var text = $.trim($(this).text());
-                return text.match(/^\d+./);
+                return text.match(/^\d{1,2}\.\s+/);
             });
             $.each(list_items, function () {
                 var text = $.trim($(this).html());
-                text = text.replace(/^\d+./, '');
+                text = text.replace(/^\d{1,2}\.\s+/, '');
                 $(this).replaceWith('<ol><li>' + text + '</li></ol>');
             });
 
