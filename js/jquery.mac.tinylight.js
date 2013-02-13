@@ -10,7 +10,7 @@
         doc: undefined,
         buttons: [],
         options: {
-            cleanupLengthTrigger: 200,
+            cleanupLengthTrigger: 300,
             height: 300,
             fontSize: '100%',
             fontFamily: 'Helvetica,Arial,sans-serif',
@@ -58,6 +58,10 @@
 
             el.contents().filter(function () { return this.nodeType === 3; }).wrap('<p />'); // wrap text nodes in paragraphs
 
+            $('div', el).each(function () {
+                $(this).replaceWith('<p>' + $(this).html() + '</p>');
+            });
+
             // Word lists
             list_items = $('p', el).filter(function (index, item) {
                 return (new RegExp('mso-list', 'gi')).test($(item).attr('style'));
@@ -67,26 +71,13 @@
                     size = 0,
                     tagName = /^[0-9a-np-z]/i.test($.trim($(item).text()).replace(/(&lt;|<)!--\[if !supportLists\]--(&gt;|>)/gi, '')) ? 'ol' : 'ul';
                 item.innerHTML = item.innerHTML.replace(new RegExp('(&lt;|<)!--\\[if !supportLists\\]--(&gt;|>).+\\1!--\\[endif\\]--\\2', 'gi'), '');
-                //$content = $(item).find('span[lang]:first').size() > 0 ? $(item).find('span[lang]:first') : $(item);
-                //$content = $(item).find('span[lang]:first').text().replace(/[^a-zа-я0-9]/gi, '').length > 0 ? $(item).find('span[lang]:first') : $(item);
-                size = $(item).children('span[lang]').size();
-                if(size === 0) {
-                    if($(item).children('span').size() > 1) {
-                        $content = $(item).children('span:last');
-                    } else {
-                        $content = $(item);
-                    }
-                } else if(size === 1) {
-                    $content = $(item).children('span[lang]:first');
-                }
-                 else if(size > 1) {
-                    $content = $(item).children('span[lang]:last');
-                }
 
-                // Remove mso spans with &nbsp;'es
-                $('span', $content).filter(function (index, item) {
-                    return (new RegExp('mso', 'gi')).test($(item).attr('style'));
-                }).remove();
+                if($(item).children('span').size() > 1 || ($(item).children('span').size() === 1 && item.childNodes.length > 1)) {
+                    $(item).children('span:first').remove();
+                }
+                $(item).find('span').contents().unwrap();
+                $content = $(item);
+
                 $(item).replaceWith('<' + tagName + '><li>' + $content.html() + '</li></' + tagName + '>');
             });
 
@@ -108,7 +99,7 @@
                 var text = '';
                 if(this.previousSibling && this.previousSibling.tagName.toLowerCase() === 'p') {
                     text = $.trim($(this.previousSibling).text());
-                    return -1 !== $.inArray(text, ['&bull;', '&#8226;', '&#x2022;', '%u2022', '%u8226']) || -1 !== $.inArray(escape(text), ['&bull;', '&#8226;', '&#x2022;', '%u2022', '%u8226']);
+                    return -1 !== $.inArray(text, ['&bull;', '&#8226;', '&#x2022;', '%u2022', '%u8226', '%uF02D']) || -1 !== $.inArray(escape(text), ['&bull;', '&#8226;', '&#x2022;', '%u2022', '%u8226', '%uF02D']);
                 }
             });
             $.each(list_items, function () {
@@ -130,12 +121,12 @@
             // Word 2003 UL list in IE8 <p>ohello</p>
             list_items = $('p', el).filter(function () {
                 var text = $.trim($(this).text());
-                return text.match(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226)/) || escape(text).match(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226)/);
+                return text.match(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/) || escape(text).match(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/);
             });
             $.each(list_items, function () {
                 var text = $.trim($(this).html());
-                text = text.replace(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226)/i, '');
-                text = unescape(escape(text).replace(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226)/i, ''));
+                text = text.replace(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/i, '');
+                text = unescape(escape(text).replace(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/i, ''));
 
                 $(this).replaceWith('<ul><li>' + text + '</li></ul>');
             });
