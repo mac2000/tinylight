@@ -193,6 +193,12 @@ test('should not convert not list strings', function() {
     check('044 234-12-12', '<p>044 234-12-12</p>');
 });
 
+test('should convert list paragraphs', function() {
+    check('<p>1. one</p>', '<ol><li>one</li></ol>');
+    check('<p>1. one</p><p>2. two</p>', '<ol><li>one</li><li>two</li></ol>');
+    check('<p><b>title</b></p><p>1. one</p><p>2. two</p>', '<p><b>title</b></p><ol><li>one</li><li>two</li></ol>');
+});
+
 module('Html other');
 test('unwrap anchor tags', function () {
     check('<a href="#">hello</a>', '<p>hello</p>');
@@ -307,6 +313,7 @@ test('property convert line breaks', function () {
     check('before<ul><li>item</li></ul><div><br></div>after<br>', '<p>before</p><ul><li>item</li></ul><p>&nbsp;</p><p>after</p>');
     check('before<div><ul><li>item</li></ul></div>', '<p>before</p><ul><li>item</li></ul>');
     check('<p>one</p><ul><li>two</li></ul>', '<p>one</p><ul><li>two</li></ul>');
+    check('<p>one<br>two</p>', '<p>one</p><p>two</p>');
 });
 
 test('should trim spaces inside tags', function () {
@@ -342,6 +349,10 @@ test('real world tests', function () {
     check('<P style="TEXT-ALIGN: justify; TEXT-INDENT: -18pt; MARGIN: 0cm 0cm 0pt 36pt; mso-margin-top-alt: auto; mso-margin-bottom-alt: auto; mso-list: l1 level1 lfo2" class=MsoNormal><SPAN style="FONT-FAMILY: Symbol; COLOR: #002060; FONT-SIZE: 11pt; mso-ansi-language: UK; mso-bidi-font-family: Symbol; mso-fareast-font-family: Symbol; mso-font-kerning: 9.0pt" lang=UK><SPAN style="mso-list: Ignore">·<SPAN style="FONT: 7pt \'Times New Roman\'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><SPAN style="FONT-FAMILY: Calibri; COLOR: #002060; FONT-SIZE: 11pt; mso-ansi-language: UK; mso-bidi-font-family: Arial; mso-font-kerning: 9.0pt" lang=UK>координувати усі види діяльності між відділами в напрямку поповнення запасів продукції;<o:p></o:p></SPAN></P>',
         '<ul><li>координувати усі види діяльності між відділами в напрямку поповнення запасів продукції;</li></ul>');
 
+});
+
+test('should proccess previously saved html', function(){
+    check('Hello<i>, </i>World <b>!</b>. <br>', '<p>Hello<i>, </i>World <b>!</b>.</p>');
 });
 
 /* TEST CASE EXAMPLE

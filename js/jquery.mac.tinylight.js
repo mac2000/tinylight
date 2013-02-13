@@ -22,7 +22,7 @@
             var el,
                 list_items;
 
-            var debug = html == '<b style="color: rgb(255, 255, 255); font-family: Arial; font-size: 13px; background-color: rgb(170, 15, 19);">Обязанности</b><br style="color: rgb(255, 255, 255); font-family: Arial; font-size: 13px; background-color: rgb(170, 15, 19);"><ul style="margin-bottom: 0px; margin-left: 0px; padding-right: 15px; padding-left: 15px; color: rgb(255, 255, 255); font-family: Arial; font-size: 13px; background-color: rgb(170, 15, 19);"><li style="list-style-position: inside;"><span style="font-family: Helv; color: black; font-size: 10pt;"><span style="font-family: Arial;">Увеличение уровня и объёмов продаж в альтернативных каналах (АПП, дилеры, М2М);</span></span></li></ul>';
+            html = $.trim(html).indexOf('<') === 0 ? $.trim(html) : '<p>' + $.trim(html) + '</p>';
 
             html = html.replace(/\u2122/g, 'TM').replace(/\u2026/g, '...').replace(/\x93|\x94|\u201c|\u201d/g, '"').replace(/\x60|\x91|\x92|\u2018|\u2019/g, "'").replace(/\u2013|\u2014|\u2015|\u2212/g, '-');
 
@@ -38,6 +38,13 @@
             html = html.replace(/<(div|p)><(ul|ol)>/gi, '<$2>').replace(/<\/(ul|ol)><\/(div|p)>/gi, '</$1>'); // lists can not be nested
 
             el = $('<div>').html(html);
+
+            // split pagargraph line breaks into separate paragraphs
+            el.find('p br').map(function(){ return this.parentNode }).each(function(){
+                this.innerHTML = this.innerHTML.replace('<br>', '</p><p>');
+            });
+            el = $('<div>').html(el.html());
+
             while ($('*:empty:not(br)', el).size() > 0) {
                 $('*:empty:not(br)', el).remove(); // remove empty non <br> nodes
             }
@@ -53,7 +60,7 @@
             $('td, th', el).each(function(){ $('<p>&nbsp;</p>').insertAfter(this); }); // insert empty paragraph after each cell
             $('td', el).contents().unwrap(); // unpwrap <td> if there is text nodes in them - they should be wrapped with <p> later
 
-            el.children('br').filter(function () { return !this.parentNode || this.parentNode.nodeName !== 'li'; }).remove(); // remove all <br> except thous who in <li>
+            el.find('br').filter(function () { return !this.parentNode || this.parentNode.nodeName.toLowerCase() !== 'li'; }).remove(); // remove all <br> except thous who in <li>
             $('*').filter(function () { return this.nodeType === 3 && /\s+/.test(this.nodeValue); }).remove(); // remove empty text nodes
 
             el.contents().filter(function () { return this.nodeType === 3; }).wrap('<p />'); // wrap text nodes in paragraphs
@@ -86,7 +93,7 @@
                 var text = '';
                 if(this.previousSibling && this.previousSibling.tagName.toLowerCase() === 'p') {
                     text = $.trim($(this.previousSibling).text());
-                    return text.match(/^\d+\./);
+                    return text.match(/^\d+\.$/);
                 }
             });
             $.each(list_items, function () {
@@ -110,11 +117,11 @@
             // Word 2003 OL list in IE8 <p>1.hello</p>
             list_items = $('p', el).filter(function () {
                 var text = $.trim($(this).text());
-                return text.match(/^\d{1,2}\.\s+/);
+                return text.match(/^\d{1,2}\.\s*/);
             });
             $.each(list_items, function () {
                 var text = $.trim($(this).html());
-                text = text.replace(/^\d{1,2}\.\s+/, '');
+                text = text.replace(/^\d{1,2}\.\s*/, '');
                 $(this).replaceWith('<ol><li>' + text + '</li></ol>');
             });
 
