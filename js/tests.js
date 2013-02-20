@@ -298,13 +298,15 @@ test('combine repeated tags', function () {
 });
 
 test('fill empty and with br paragraphs and divs with non break space', function() {
-    check('<p></p>', '<p>&nbsp;</p>');
+    /*check('<p></p>', '<p>&nbsp;</p>');
     check('<p><br></p>', '<p>&nbsp;</p>');
     check('<div><br></div>', '<p>&nbsp;</p>');
 
     check('<p style="color:red" class="red"></p>', '<p>&nbsp;</p>');
     check('<p style="color:red" class="red"><br></p>', '<p>&nbsp;</p>');
     check('<div style="color:red" class="red"><br></div>', '<p>&nbsp;</p>');
+*/
+    check('<p><b><br></b></p>', '<p>&nbsp;</p>');
 });
 
 test('property convert line breaks', function () {
@@ -313,6 +315,9 @@ test('property convert line breaks', function () {
     check('before<ul><li>item</li></ul><div><br></div>after<br>', '<p>before</p><ul><li>item</li></ul><p>&nbsp;</p><p>after</p>');
     check('before<div><ul><li>item</li></ul></div>', '<p>before</p><ul><li>item</li></ul>');
     check('<p>one</p><ul><li>two</li></ul>', '<p>one</p><ul><li>two</li></ul>');
+    check('<ul><li>one</li></ul><p>&nbsp;</p><p>two</p>', '<ul><li>one</li></ul><p>&nbsp;</p><p>two</p>');
+    check('<ul><li><b>one</b></li></ul><p>&nbsp;</p><p><b>two</b></p>', '<ul><li><b>one</b></li></ul><p>&nbsp;</p><p><b>two</b></p>');
+    check('<ul><li>one</li></ul><p><br></p><p>two</p>', '<ul><li>one</li></ul><p>&nbsp;</p><p>two</p>');
     check('<p>one<br>two</p>', '<p>one</p><p>two</p>');
 });
 

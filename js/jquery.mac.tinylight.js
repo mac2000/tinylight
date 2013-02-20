@@ -40,7 +40,7 @@
             el = $('<div>').html(html);
 
             // split pagargraph line breaks into separate paragraphs
-            el.find('p br').map(function(){ return this.parentNode }).each(function(){
+            el.find('p > br').map(function(){ return this.parentNode }).each(function(){
                 this.innerHTML = this.innerHTML.replace('<br>', '</p><p>');
             });
             el = $('<div>').html(el.html());
@@ -91,7 +91,7 @@
             // Word 2003 OL list pasted into chrome <p>1.</p><p>hello</p>
             list_items = $('p', el).filter(function () {
                 var text = '';
-                if(this.previousSibling && this.previousSibling.tagName.toLowerCase() === 'p') {
+                if(this.previousSibling && this.previousSibling.nodeName && this.previousSibling.nodeName.toLowerCase() === 'p') {
                     text = $.trim($(this.previousSibling).text());
                     return text.match(/^\d+\.$/);
                 }
@@ -104,7 +104,7 @@
             // Word 2003 UL list pasted into chrome <p>o</p><p>hello</p>
             list_items = $('p', el).filter(function () {
                 var text = '';
-                if(this.previousSibling && this.previousSibling.tagName.toLowerCase() === 'p') {
+                if(this.previousSibling && this.previousSibling.nodeName && this.previousSibling.nodeName.toLowerCase() === 'p') {
                     text = $.trim($(this.previousSibling).text());
                     return -1 !== $.inArray(text, ['&bull;', '&#8226;', '&#x2022;', '%u2022', '%u8226', '%uF02D']) || -1 !== $.inArray(escape(text), ['&bull;', '&#8226;', '&#x2022;', '%u2022', '%u8226', '%uF02D']);
                 }
@@ -217,10 +217,12 @@
                 $('span', item).contents().unwrap();
                 $(item).replaceWith(start + $(item).html() + end);
             });
+
             // IE 9, got after test <b><i>span</i></b><i></i> - removing empty nodes
-            while ($('*:empty:not(br)', el).size() > 0) {
-                $('*:empty:not(br)', el).remove();
+            while ($('*:empty:not(br):not(p)', el).size() > 0) {
+                $('*:empty:not(br):not(p)', el).remove();
             }
+            $('p:empty', el).html('&nbsp;');
 
             $('div', el).replaceWith(function () {
                 return '<p>' + $(this).html() + '</p>';
@@ -299,7 +301,7 @@
             button.on('mousedown', function (e) { // must be mousedown, not click, otherwise it will not work in Firefox, because before click, text in edit area is unselected
                 e.preventDefault();
                 var wrap_with_p = ((command === 'InsertUnorderedList' || command === 'InsertOrderedList') && self.doc.queryCommandState(command));
-                self.doc.execCommand(command);
+                self.doc.execCommand(command, false, null);
                 if(wrap_with_p) {
                     self.doc.execCommand('FormatBlock', false, self.options.blockTag); //wrap with <p>
                 }
@@ -313,8 +315,9 @@
             if (self.buttons.length > 0) {
                 $.each(self.buttons, function (index, button) {
                     var command = button.data('command'),
-                        enabled = self.doc.queryCommandEnabled(command);
-                    button.toggleClass('mac-tinylight-toolbar-button__active', self.doc.queryCommandState(command));
+                        enabled = self.doc.queryCommandEnabled(command),
+                        state = self.doc.queryCommandState(command);
+                    button.toggleClass('mac-tinylight-toolbar-button__active', state);
                     button.toggleClass('mac-tinylight-toolbar-button__disabled', !enabled);
 
                     if (enabled) {
@@ -358,7 +361,8 @@
             // Make it editable
             if (self.doc.body.contentEditable) {
                 self.doc.body.contentEditable = true;
-            } else {
+            }
+            if (self.doc.designMode) {
                 self.doc.designMode = 'on';
             }
 
@@ -429,7 +433,6 @@
                 var container = self._selectedNode();
                 if(container && 'p' === container.tagName.toLowerCase() && '&nbsp;' === container.innerHTML) {
                     container.innerHTML = navigator.userAgent.match(/MSIE/) ? '' : '<br>';
-
                 }
 
                 self._updateToolbar();
