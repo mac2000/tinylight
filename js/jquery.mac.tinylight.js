@@ -37,6 +37,8 @@
             html = html.replace(/<(div|p)[^>]*>(<br>)?<\/\1>/gi, '<p>&nbsp;</p>'); // Convert all kind of empty lines to <p>&nbsp;</p>
             html = html.replace(/<(div|p)><(ul|ol)>/gi, '<$2>').replace(/<\/(ul|ol)><\/(div|p)>/gi, '</$1>'); // lists can not be nested
 
+            html = html.replace(/(&nbsp;)+/gi, '&nbsp;'); // strip white spaces
+
             el = $('<div>').html(html);
 
             // split pagargraph line breaks into separate paragraphs
