@@ -216,6 +216,12 @@ test('unwrap font tags', function () {
     check('<p><font face="Arial"><b>hello</b></font></p>', '<p><b>hello</b></p>');
 });
 
+test('unwrap pre tags', function () {
+    check('<pre>hello</pre>', '<p>hello</p>');
+    check('<pre><b><font face="Arial">hello</font></b></pre>', '<p><b>hello</b></p>');
+    check('<pre><font face="Arial"><b>hello</b></font></pre>', '<p><b>hello</b></p>');
+});
+
 test('unwrap span tags', function () {
     check('<p><span style="color:red">hello</span></p>', '<p>hello</p>');
     check('<p><b><span style="color:red">hello</span></b></p>', '<p><b>hello</b></p>');

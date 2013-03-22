@@ -52,6 +52,7 @@
             }
 
             $('a', el).contents().unwrap(); // unwrap anchors
+            $('pre', el).contents().unwrap();
 
             //$('tr, thead, tbody, tfoot, table', el).contents().unwrap(); // must be done by one for IE8
             $('tr', el).contents().unwrap(); // unwrap tables and their rows
