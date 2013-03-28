@@ -22,8 +22,6 @@
             var el,
                 list_items;
 
-            html = $.trim(html).indexOf('<') === 0 ? $.trim(html) : '<p>' + $.trim(html) + '</p>';
-
             html = html.replace(/\u2122/g, 'TM').replace(/\u2026/g, '...').replace(/\x93|\x94|\u201c|\u201d/g, '"').replace(/\x60|\x91|\x92|\u2018|\u2019/g, "'").replace(/\u2013|\u2014|\u2015|\u2212/g, '-');
 
             // some basic replacements, we are:
@@ -33,26 +31,51 @@
             // converting all <br> tags to same format
             // removing <o:p></o:p>
             html = html.replace(/\s+/g, ' ').replace(/[\t\r\n\n]+/g, '').replace(/>\s+</g, '><').replace(/<br\s*\/?>/gi, '<br>').replace(/<\/?font[^>]*>/gi, '').replace(/<\/?o:p>/gi, '');
-
             html = html.replace(/<(div|p)[^>]*>(<br>)?<\/\1>/gi, '<p>&nbsp;</p>'); // Convert all kind of empty lines to <p>&nbsp;</p>
             html = html.replace(/<(div|p)><(ul|ol)>/gi, '<$2>').replace(/<\/(ul|ol)><\/(div|p)>/gi, '</$1>'); // lists can not be nested
-
             html = html.replace(/(&nbsp;)+/gi, '&nbsp;'); // strip white spaces
 
             el = $('<div>').html(html);
+            el.find('applet, area, audio, base, basefont, button, canvas, col, colgroup, command, datalist, embed, fieldset, form, frame, frameset, head, hr, iframe, img, input, keygen, link, map, meta, noframes, noscript, object, optgroup, option, param, progress, script, select, source, style, textarea, track, video, wbr').remove(); // remove unsupported tags
+
+            /*$('a', el).contents().unwrap(); // unwrap anchors
+            $('pre', el).contents().unwrap();
+            $('del', el).contents().unwrap();
+            $('strike', el).contents().unwrap();*/
+
+            $.each(['a', 'abbr', 'acronym', 'address', 'article', 'aside', 'bdi', 'bdo', 'big', 'caption', 'center', 'cite', 'code', 'dd', 'del', 'details', 'dfn', 'dialog', 'dl', 'dt', 'figcaption', 'figure', 'font', 'footer', 'header', 'hgroup', 'ins', 'kbd', 'label', 'legend', 'mark', 'menu', 'meter', 'nav', 'output', 'pre', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'small', 'strike', 'sub', 'summary', 'sup', 'tfoot', 'time', 'title', 'tt', 'var'], function(index, tag){
+                $(tag, el).contents().unwrap();
+            });
+
+            // Wrap all non block nodes into paragrahps
+            do {
+                var wrapMe = []; // will contain non block elements that should be wrapped with paragraph
+                var firstNonBlockElement = jQuery(el.get(0).childNodes).filter(function(){ return !(this.nodeType === 1 && $.inArray(this.nodeName.toLowerCase(), ['address', 'article', 'aside', 'audio', 'blockquote', 'canvas', 'center', 'dd', 'details', 'dir', 'div', 'dl', 'dt', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'li', 'menu', 'nav', 'ol', 'output', 'p', 'pre', 'section', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'ul', 'video']) > -1); }).first().get(0);
+                if(firstNonBlockElement && firstNonBlockElement.nodeName.toLowerCase() !== 'p') {
+                    wrapMe.push(firstNonBlockElement);
+                    // traverse all next siblings until block element found
+                    do {
+                        var next = wrapMe[wrapMe.length - 1].nextSibling;
+                        var add = !(next && next.nodeType === 1 && $(next).css('display') === 'block');
+                        if(add) wrapMe.push(next);
+                    } while(add && next);
+                }
+
+                if(wrapMe.length > 0) {
+                    jQuery(wrapMe).wrapAll('<p />');
+                }
+            } while(firstNonBlockElement && firstNonBlockElement.nodeName.toLowerCase() !== 'p'); // repeat until there is some non wrapped elements
+
 
             // split pagargraph line breaks into separate paragraphs
             el.find('p > br').map(function(){ return this.parentNode }).each(function(){
-                this.innerHTML = this.innerHTML.replace('<br>', '</p><p>');
+                $(this).replaceWith('<p>' + this.innerHTML.replace(/<br[^>]*>/gi, '</p><p>') + '</p>');
             });
             el = $('<div>').html(el.html());
 
             while ($('*:empty:not(br)', el).size() > 0) {
                 $('*:empty:not(br)', el).remove(); // remove empty non <br> nodes
             }
-
-            $('a', el).contents().unwrap(); // unwrap anchors
-            $('pre', el).contents().unwrap();
 
             //$('tr, thead, tbody, tfoot, table', el).contents().unwrap(); // must be done by one for IE8
             $('tr', el).contents().unwrap(); // unwrap tables and their rows
@@ -66,9 +89,9 @@
             el.find('br').filter(function () { return !this.parentNode || this.parentNode.nodeName.toLowerCase() !== 'li'; }).remove(); // remove all <br> except thous who in <li>
             $('*').filter(function () { return this.nodeType === 3 && /\s+/.test(this.nodeValue); }).remove(); // remove empty text nodes
 
-            el.contents().filter(function () { return this.nodeType === 3; }).wrap('<p />'); // wrap text nodes in paragraphs
+            el.contents().filter(function () { return this.nodeType === 3 && /\S+/.test(this.nodeValue); }).wrap('<p />'); // wrap text nodes in paragraphs
 
-            $('div', el).each(function () {
+            $('div, blockquote', el).each(function () {
                 $(this).replaceWith('<p>' + $(this).html() + '</p>');
             });
 
@@ -81,14 +104,10 @@
                     size = 0,
                     tagName = /^[0-9a-np-z]/i.test($.trim($(item).text()).replace(/(&lt;|<)!--\[if !supportLists\]--(&gt;|>)/gi, '')) ? 'ol' : 'ul';
                 item.innerHTML = item.innerHTML.replace(new RegExp('(&lt;|<)!--\\[if !supportLists\\]--(&gt;|>).+\\1!--\\[endif\\]--\\2', 'gi'), '');
-
-                if($(item).children('span').size() > 1 || ($(item).children('span').size() === 1 && item.childNodes.length > 1)) {
-                    $(item).children('span:first').remove();
-                }
+                item.innerHTML = item.innerHTML.replace(/&nbsp;+/gi, ' ');
                 $(item).find('span').contents().unwrap();
-                $content = $(item);
-
-                $(item).replaceWith('<' + tagName + '><li>' + $content.html() + '</li></' + tagName + '>');
+                item.innerHTML = item.innerHTML.replace(/^[^a-zа-я]+/gi, '');
+                $(item).replaceWith('<' + tagName + '><li>' + $.trim(item.innerHTML) + '</li></' + tagName + '>');
             });
 
             // Word 2003 OL list pasted into chrome <p>1.</p><p>hello</p>
@@ -182,11 +201,14 @@
                 list_items.each(function () { $(this).prependTo($(this).next('ul, ol')); });
             } while(list_items.size() > 0);
 
-
-
             // Remove comments after dealing with lists
             $('*', el).contents().filter(function () { return this.nodeType == 8; }).remove(); // remove comments
             el.contents().filter(function () { return this.nodeType == 8; }).remove(); // remove comments
+
+            // Cleanup li items
+            $('li', el).each(function(){
+                $(this).html($.trim($(this).html()));
+            });
 
 
             // Replace long tags to short
