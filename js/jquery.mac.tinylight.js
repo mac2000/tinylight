@@ -106,7 +106,7 @@
                 item.innerHTML = item.innerHTML.replace(new RegExp('(&lt;|<)!--\\[if !supportLists\\]--(&gt;|>).+\\1!--\\[endif\\]--\\2', 'gi'), '');
                 item.innerHTML = item.innerHTML.replace(/&nbsp;+/gi, ' ');
                 $(item).find('span').contents().unwrap();
-                item.innerHTML = item.innerHTML.replace(/^[^a-zа-я]+/gi, '');
+                item.innerHTML = item.innerHTML.replace(/^[^0-9a-zа-я]+/gi, '').replace(/^\d{1,2}\.\s+/, '');
                 $(item).replaceWith('<' + tagName + '><li>' + $.trim(item.innerHTML) + '</li></' + tagName + '>');
             });
 
@@ -386,8 +386,7 @@
             // Make it editable
             if (self.doc.body.contentEditable) {
                 self.doc.body.contentEditable = true;
-            }
-            if (self.doc.designMode) {
+            } else {
                 self.doc.designMode = 'on';
             }
 
