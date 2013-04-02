@@ -146,6 +146,8 @@ test('will fix broken lists items after', function() {
     check('<ol><li>one</li></ol><li>two</li>', '<ol><li>one</li><li>two</li></ol>');
     check('<ol><li>one</li></ol><li>two</li><li>three</li>', '<ol><li>one</li><li>two</li><li>three</li></ol>');
     check('<ol><li>one</li></ol><li>two</li><li>three</li><li>four</li>', '<ol><li>one</li><li>two</li><li>three</li><li>four</li></ol>');
+
+    check('<ul><p>text</p><ol><li>item</li></ol>text.<br><li>item</li></ul>', '<p>text</p><ol><li>item</li></ol><p>text.</p><ul><li>item</li></ul>');
 });
 
 test('will fix broken lists items before', function() {
@@ -156,6 +158,8 @@ test('will fix broken lists items before', function() {
     check('<li>one</li><ol><li>two</li></ol>', '<ol><li>one</li><li>two</li></ol>');
     check('<li>one</li><li>two</li><ol><li>three</li></ol>', '<ol><li>one</li><li>two</li><li>three</li></ol>');
     check('<li>one</li><li>two</li><li>three</li><ol><li>four</li></ol>', '<ol><li>one</li><li>two</li><li>three</li><li>four</li></ol>');
+
+    check('<ul><p>text</p><li>item</li>text.<br><ol><li>item</li></ol></ul>', '<p>text</p><ul><li>item</li></ul><p>text.</p><ol><li>item</li></ol>');
 });
 
 test('will fix broken lists items before and after', function() {

@@ -181,7 +181,7 @@
                     return this.parentNode.tagName.toLowerCase() !== 'ul' &&
                         this.parentNode.tagName.toLowerCase() !== 'ol' &&
                         this.previousSibling && (
-                            this.previousSibling.tagName.toLowerCase() === 'ul' || this.previousSibling.tagName.toLowerCase() === 'ol'
+                            this.previousSibling.nodeName.toLowerCase() === 'ul' || this.previousSibling.nodeName.toLowerCase() === 'ol'
                         );
                 });
 
@@ -194,12 +194,19 @@
                     return this.parentNode.tagName.toLowerCase() !== 'ul' &&
                         this.parentNode.tagName.toLowerCase() !== 'ol' &&
                         this.nextSibling && (
-                            this.nextSibling.tagName.toLowerCase() === 'ul' || this.nextSibling.tagName.toLowerCase() === 'ol'
+                            this.nextSibling.nodeName.toLowerCase() === 'ul' || this.nextSibling.nodeName.toLowerCase() === 'ol'
                         );
                 });
 
                 list_items.each(function () { $(this).prependTo($(this).next('ul, ol')); });
             } while(list_items.size() > 0);
+
+            // Single li items
+            $('li', el).filter(function(){
+                if(this.previousSibling && this.previousSibling.nodeType === 3) $(this.previousSibling).wrap('<p />');
+                if(this.nextSibling && this.nextSibling.nodeType === 3) $(this.nextSibling).wrap('<p />');
+                return this.parentNode && this.parentNode.nodeName.toLowerCase() !== 'ul' && this.parentNode.nodeName.toLowerCase() !== 'ol';
+            }).wrap('<ul />');
 
             // Remove comments after dealing with lists
             $('*', el).contents().filter(function () { return this.nodeType == 8; }).remove(); // remove comments
