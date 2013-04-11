@@ -30,7 +30,7 @@
             // removing spaces between tags
             // converting all <br> tags to same format
             // removing <o:p></o:p>
-            html = html.replace(/\s+/g, ' ').replace(/[\t\r\n\n]+/g, '').replace(/>\s+</g, '><').replace(/<br\s*\/?>/gi, '<br>').replace(/<\/?font[^>]*>/gi, '').replace(/<\/?o:p>/gi, '');
+            html = html.replace(/\s+/g, ' ').replace(/[\t\r\n\n]+/g, '').replace(/<br\s*\/?>/gi, '<br>').replace(/<\/?font[^>]*>/gi, '').replace(/<\/?o:p>/gi, '');
             html = html.replace(/<(div|p)[^>]*>(<br>)?<\/\1>/gi, '<p>&nbsp;</p>'); // Convert all kind of empty lines to <p>&nbsp;</p>
             html = html.replace(/<(div|p)><(ul|ol)>/gi, '<$2>').replace(/<\/(ul|ol)><\/(div|p)>/gi, '</$1>'); // lists can not be nested
             html = html.replace(/(&nbsp;)+/gi, '&nbsp;'); // strip white spaces
@@ -46,6 +46,7 @@
             $.each(['a', 'abbr', 'acronym', 'address', 'article', 'aside', 'bdi', 'bdo', 'big', 'caption', 'center', 'cite', 'code', 'dd', 'del', 'details', 'dfn', 'dialog', 'dl', 'dt', 'figcaption', 'figure', 'font', 'footer', 'header', 'hgroup', 'ins', 'kbd', 'label', 'legend', 'mark', 'menu', 'meter', 'nav', 'output', 'pre', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'small', 'strike', 'sub', 'summary', 'sup', 'tfoot', 'time', 'title', 'tt', 'var'], function(index, tag){
                 $(tag, el).contents().unwrap();
             });
+
 
             // Wrap all non block nodes into paragrahps
             do {
@@ -103,10 +104,13 @@
                 var $content,
                     size = 0,
                     tagName = /^[0-9a-np-z]/i.test($.trim($(item).text()).replace(/(&lt;|<)!--\[if !supportLists\]--(&gt;|>)/gi, '')) ? 'ol' : 'ul';
+
                 item.innerHTML = item.innerHTML.replace(new RegExp('(&lt;|<)!--\\[if !supportLists\\]--(&gt;|>).+\\1!--\\[endif\\]--\\2', 'gi'), '');
                 item.innerHTML = item.innerHTML.replace(/&nbsp;+/gi, ' ');
                 $(item).find('span').contents().unwrap();
-                item.innerHTML = item.innerHTML.replace(/^[^0-9a-zа-я]+/gi, '').replace(/^\d{1,2}\.\s+/, '');
+
+                item.innerHTML = item.innerHTML.replace(/^[^0-9a-zа-я<]+/gi, '').replace(/^\d{1,2}\.\s+/, '').replace(/\s+/, ' ');
+
                 $(item).replaceWith('<' + tagName + '><li>' + $.trim(item.innerHTML) + '</li></' + tagName + '>');
             });
 
@@ -142,6 +146,7 @@
                 return text.match(/^\d{1,2}\.\s*/);
             });
             $.each(list_items, function () {
+                $(this).find('span').contents().unwrap();
                 var text = $.trim($(this).html());
                 text = text.replace(/^\d{1,2}\.\s*/, '');
                 $(this).replaceWith('<ol><li>' + text + '</li></ol>');
@@ -153,6 +158,7 @@
                 return text.match(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/) || escape(text).match(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/);
             });
             $.each(list_items, function () {
+                $(this).find('span').contents().unwrap();
                 var text = $.trim($(this).html());
                 text = text.replace(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/i, '');
                 text = unescape(escape(text).replace(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/i, ''));

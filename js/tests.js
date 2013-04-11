@@ -346,6 +346,8 @@ test('property convert line breaks', function () {
 test('should trim spaces inside tags', function () {
     check('<p> hello </p>', '<p>hello</p>');
     check('<p> hello <b>world</b> </p>', '<p>hello <b>world</b></p>');
+    check('<b><span lang="RU" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Arial Unicode MS&quot;,&quot;sans-serif&quot;;mso-ascii-font-family:Helvetica;mso-bidi-font-family:&quot;Times New Roman&quot;;color:#4C4C4C;mso-ansi-language:RU">Hello</span></b><b><span lang="RU" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Helvetica&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:&quot;Arial Unicode MS&quot;;mso-hansi-font-family:&quot;Arial Unicode MS&quot;;mso-bidi-font-family:&quot;Times New Roman&quot;;color:#4C4C4C;mso-ansi-language:RU"> </span></b><b><span lang="RU" style="font-size:11.0pt;mso-bidi-font-size:12.0pt;font-family:&quot;Arial Unicode MS&quot;,&quot;sans-serif&quot;;mso-ascii-font-family:Helvetica;mso-bidi-font-family:&quot;Times New Roman&quot;;color:#4C4C4C;mso-ansi-language:RU">World</span></b>',
+        '<p><b>Hello World</b></p>');
 });
 
 test('should unwrap tables', function () {
