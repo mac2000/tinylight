@@ -302,6 +302,11 @@
             return html;
         },
         setHtml: function (html) {
+            /*if (!this.cleaningup) {
+                this.cleaningup = true;
+                html = this.cleanupHtml(html);
+                this.cleaningup = false;
+            }*/
             html = this.cleanupHtml(html);
             this.doc.body.innerHTML = html;
             this.element.val(html == '<p>&nbsp;</p>' ? '' : html);
@@ -309,6 +314,9 @@
         },
         getHtml: function () {
             return this.doc.body.innerHTML;
+        },
+        getText: function() {
+            return $(this.doc.body).text();
         },
         _selectedNode: function () {
             var sel,
@@ -357,7 +365,7 @@
                 $.each(self.buttons, function (index, button) {
                     var command = button.data('command'),
                         enabled = self.doc.queryCommandEnabled(command),
-                        state = self.doc.queryCommandState(command);
+                        state = false;//self.doc.queryCommandState(command);
                     button.toggleClass('mac-tinylight-toolbar-button__active', state);
                     button.toggleClass('mac-tinylight-toolbar-button__disabled', !enabled);
 
@@ -394,7 +402,7 @@
             self.wnd = self.frame.get(0).contentWindow;
             self.doc = self.wnd.document;
             self.doc.open();
-            self.doc.write('<!DOCTYPE html><title></title><meta charset="utf-8"><link rel="stylesheet" href="http://css.cdn.tl/normalize.css"><style>html{height:100%}html,body{min-height:94%;}body{margin:.5em;font-family:' + self.options.fontFamily + ';font-size:' + self.options.fontSize + ';background-color:' + self.options.backgroundColor + ';}p,ul,ol{margin:2px 0}p{background:#eee;}li{background:#ccc}</style><body></body>');// + '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>'
+            self.doc.write('<!DOCTYPE html><title></title><meta charset="utf-8"><link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css"><style>html{height:100%}html,body{min-height:94%;}body{margin:.5em;font-family:' + self.options.fontFamily + ';font-size:' + self.options.fontSize + ';background-color:' + self.options.backgroundColor + ';}p,ul,ol{margin:2px 0}p{background:#eee;}li{background:#ccc}</style><body></body>');// + '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>'
             self.doc.close();
 
             self.setHtml($.trim(self.element.val()) === '' ? '<p>&nbsp;</p>' : self.element.val());
@@ -417,6 +425,12 @@
                         self.doc.execCommand('styleWithCSS', false, false);
                     } catch (exStyleWithCSS2) {}
                 }
+            }
+
+            if (navigator.userAgent.match(/MSIE 8/)) { // RUA-11580
+                setInterval(function () {
+                    $(self.doc).find('script, iframe, link').remove();
+                }, 100);
             }
 
             // Attach events
@@ -465,6 +479,8 @@
                 if ((e.keyCode === 86 && e.ctrlKey) || (e.keyCode === 45 && e.shiftKey)) {
                     self.setHtml(self.getHtml());
                 }
+
+                self.element.trigger('keyup');
             });
 
             // On any change, check how much is changed and if it is greater than limit run cleanup
