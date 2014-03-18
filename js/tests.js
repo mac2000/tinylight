@@ -350,8 +350,13 @@ test('should trim spaces inside tags', function () {
         '<p><b>Hello World</b></p>');
 });
 
+test('should unwrap divs with only one div or paragraph child', function(){
+	check('<div><div>hello</div></div>', '<p>hello</p>');
+	check('<div><div><p>hello</p></div></div>', '<p>hello</p>');
+});
+
 test('should unwrap tables', function () {
-    check('<table class="table"><tr><td>key</td><td>val</td></tr><tr><td>1</td><td>one</td></tr></table>',
+    /*check('<table class="table"><tr><td>key</td><td>val</td></tr><tr><td>1</td><td>one</td></tr></table>',
         '<p>key</p><p>&nbsp;</p><p>val</p><p>&nbsp;</p><p>1</p><p>&nbsp;</p><p>one</p><p>&nbsp;</p>');
 
     check('<table class="table"><tr><td><p>hello</p></td></tr></table>',
@@ -359,6 +364,12 @@ test('should unwrap tables', function () {
 
     check('<table class="table"><tr><td><b>hello</b></td></tr></table>',
         '<p><b>hello</b></p><p>&nbsp;</p>');
+*/
+    check('<div><table><tbody><tr><td><div><div><div><div><div><div><p><strong>hello</strong></p></div></div></div></div></div></div></td></tr></tbody></table></div>',
+    	'hello');
+
+    check('<div><table><tbody><tr><td><div><div><div><div><div><div><p><strong>hello</strong></p><p>world</p></div></div></div></div></div></div></td></tr></tbody></table></div>',
+    	'hello');
 });
 
 test('real world tests', function () {
@@ -380,6 +391,9 @@ test('real world tests', function () {
 
     check('<p class="MsoNormal" style="margin-left:36.0pt;text-indent:-18.0pt;mso-list:l0 level1 lfo1;tab-stops:list 36.0pt"><!--[if !supportLists]--><span style="font-size:13.0pt;mso-bidi-font-size:15.5pt;font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol">-<span style="font-size: 7pt; line-height: normal; font-family: \'Times New Roman\';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><!--[endif]--><span style="font-size:13.0pt;mso-bidi-font-size:15.5pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;">уверенный пользователь ПК, знание1С (Кадры. Предприятие), отличное знание </span><span lang="EN-US" style="font-size:13.0pt;mso-bidi-font-size:15.5pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;mso-ansi-language:EN-US">Excel</span><span style="font-size:13.0pt;mso-bidi-font-size:15.5pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;">;<o:p></o:p></span></p>',
         '<ul><li>уверенный пользователь ПК, знание1С (Кадры. Предприятие), отличное знание Excel;</li></ul>');
+
+    check('<p class="MsoNormal" style="margin-bottom:0cm;margin-bottom:.0001pt;line-height:normal"><span lang="UK">- item;<o:p></o:p></span></p><p class="MsoNormal" style="margin-bottom:0cm;margin-bottom:.0001pt;line-height:normal"><span lang="UK">- item;<o:p></o:p></span></p><p class="MsoNormal" style="margin-bottom:0cm;margin-bottom:.0001pt;line-height:normal"><span lang="UK">- item;<o:p></o:p></span></p>',
+        '<p>- item;</p><p>- item;</p><p>- item;</p>');
 
 });
 

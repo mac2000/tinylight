@@ -43,33 +43,31 @@
             $('del', el).contents().unwrap();
             $('strike', el).contents().unwrap();*/
 
-            $.each(['a', 'abbr', 'acronym', 'address', 'article', 'aside', 'bdi', 'bdo', 'big', 'caption', 'center', 'cite', 'code', 'dd', 'del', 'details', 'dfn', 'dialog', 'dl', 'dt', 'figcaption', 'figure', 'font', 'footer', 'header', 'hgroup', 'ins', 'kbd', 'label', 'legend', 'mark', 'menu', 'meter', 'nav', 'output', 'pre', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'small', 'strike', 'sub', 'summary', 'sup', 'tfoot', 'time', 'title', 'tt', 'var'], function(index, tag){
+            $.each([/*'em', 'i', 'u',*/ 'a', 'abbr', 'acronym', 'address', 'article', 'aside', 'bdi', 'bdo', 'big', 'caption', 'center', 'cite', 'code', 'dd', 'del', 'details', 'dfn', 'dialog', 'dl', 'dt', 'figcaption', 'figure', 'font', 'footer', 'header', 'hgroup', 'ins', 'kbd', 'label', 'legend', 'mark', 'menu', 'meter', 'nav', 'output', 'pre', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'small', 'strike', 'sub', 'summary', 'sup', 'tfoot', 'time', 'title', 'tt', 'var'], function (index, tag) {
                 $(tag, el).contents().unwrap();
             });
-
 
             // Wrap all non block nodes into paragrahps
             do {
                 var wrapMe = []; // will contain non block elements that should be wrapped with paragraph
-                var firstNonBlockElement = jQuery(el.get(0).childNodes).filter(function(){ return !(this.nodeType === 1 && $.inArray(this.nodeName.toLowerCase(), ['address', 'article', 'aside', 'audio', 'blockquote', 'canvas', 'center', 'dd', 'details', 'dir', 'div', 'dl', 'dt', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'li', 'menu', 'nav', 'ol', 'output', 'p', 'pre', 'section', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'ul', 'video']) > -1); }).first().get(0);
-                if(firstNonBlockElement && firstNonBlockElement.nodeName.toLowerCase() !== 'p') {
+                var firstNonBlockElement = jQuery(el.get(0).childNodes).filter(function () { return !(this.nodeType === 1 && $.inArray(this.nodeName.toLowerCase(), ['address', 'article', 'aside', 'audio', 'blockquote', 'canvas', 'center', 'dd', 'details', 'dir', 'div', 'dl', 'dt', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'li', 'menu', 'nav', 'ol', 'output', 'p', 'pre', 'section', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'ul', 'video']) > -1); }).first().get(0);
+                if (firstNonBlockElement && firstNonBlockElement.nodeName.toLowerCase() !== 'p') {
                     wrapMe.push(firstNonBlockElement);
                     // traverse all next siblings until block element found
                     do {
                         var next = wrapMe[wrapMe.length - 1].nextSibling;
                         var add = !(next && next.nodeType === 1 && $(next).css('display') === 'block');
-                        if(add) wrapMe.push(next);
-                    } while(add && next);
+                        if (add) wrapMe.push(next);
+                    } while (add && next);
                 }
 
-                if(wrapMe.length > 0) {
+                if (wrapMe.length > 0) {
                     jQuery(wrapMe).wrapAll('<p />');
                 }
-            } while(firstNonBlockElement && firstNonBlockElement.nodeName.toLowerCase() !== 'p'); // repeat until there is some non wrapped elements
-
+            } while (firstNonBlockElement && firstNonBlockElement.nodeName.toLowerCase() !== 'p'); // repeat until there is some non wrapped elements
 
             // split pagargraph line breaks into separate paragraphs
-            el.find('p > br').map(function(){ return this.parentNode }).each(function(){
+            el.find('p > br').map(function () { return this.parentNode }).each(function () {
                 $(this).replaceWith('<p>' + this.innerHTML.replace(/<br[^>]*>/gi, '</p><p>') + '</p>');
             });
             el = $('<div>').html(el.html());
@@ -84,13 +82,19 @@
             $('thead', el).contents().unwrap();
             $('tbody', el).contents().unwrap();
             $('table', el).contents().unwrap();
-            $('td, th', el).each(function(){ $('<p>&nbsp;</p>').insertAfter(this); }); // insert empty paragraph after each cell
+            $('td, th', el).each(function () { if($.trim($(this).text()).length) $('<p>&nbsp;</p>').insertAfter(this); }); // insert empty paragraph after each cell
             $('td', el).contents().unwrap(); // unpwrap <td> if there is text nodes in them - they should be wrapped with <p> later
 
             el.find('br').filter(function () { return !this.parentNode || this.parentNode.nodeName.toLowerCase() !== 'li'; }).remove(); // remove all <br> except thous who in <li>
             $('*').filter(function () { return this.nodeType === 3 && /\s+/.test(this.nodeValue); }).remove(); // remove empty text nodes
 
             el.contents().filter(function () { return this.nodeType === 3 && /\S+/.test(this.nodeValue); }).wrap('<p />'); // wrap text nodes in paragraphs
+
+            el.find('div').each(function(){
+                if($(this).children('p, div').size() == 1 && $(this).children('*').size() == 1) {
+                    $(this).contents().unwrap();
+                }
+            });
 
             $('div, blockquote', el).each(function () {
                 $(this).replaceWith('<p>' + $(this).html() + '</p>');
@@ -104,11 +108,9 @@
                 var $content,
                     size = 0,
                     tagName = /^[0-9a-np-z]/i.test($.trim($(item).text()).replace(/(&lt;|<)!--\[if !supportLists\]--(&gt;|>)/gi, '')) ? 'ol' : 'ul';
-
                 item.innerHTML = item.innerHTML.replace(new RegExp('(&lt;|<)!--\\[if !supportLists\\]--(&gt;|>).+\\1!--\\[endif\\]--\\2', 'gi'), '');
                 item.innerHTML = item.innerHTML.replace(/&nbsp;+/gi, ' ');
                 $(item).find('span').contents().unwrap();
-
                 item.innerHTML = item.innerHTML.replace(/^[^0-9a-zа-я<]+/gi, '').replace(/^\d{1,2}\.\s+/, '').replace(/\s+/, ' ');
 
                 $(item).replaceWith('<' + tagName + '><li>' + $.trim(item.innerHTML) + '</li></' + tagName + '>');
@@ -117,7 +119,7 @@
             // Word 2003 OL list pasted into chrome <p>1.</p><p>hello</p>
             list_items = $('p', el).filter(function () {
                 var text = '';
-                if(this.previousSibling && this.previousSibling.nodeName && this.previousSibling.nodeName.toLowerCase() === 'p') {
+                if (this.previousSibling && this.previousSibling.nodeName && this.previousSibling.nodeName.toLowerCase() === 'p') {
                     text = $.trim($(this.previousSibling).text());
                     return text.match(/^\d+\.$/);
                 }
@@ -130,7 +132,7 @@
             // Word 2003 UL list pasted into chrome <p>o</p><p>hello</p>
             list_items = $('p', el).filter(function () {
                 var text = '';
-                if(this.previousSibling && this.previousSibling.nodeName && this.previousSibling.nodeName.toLowerCase() === 'p') {
+                if (this.previousSibling && this.previousSibling.nodeName && this.previousSibling.nodeName.toLowerCase() === 'p') {
                     text = $.trim($(this.previousSibling).text());
                     return -1 !== $.inArray(text, ['&bull;', '&#8226;', '&#x2022;', '%u2022', '%u8226', '%uF02D']) || -1 !== $.inArray(escape(text), ['&bull;', '&#8226;', '&#x2022;', '%u2022', '%u8226', '%uF02D']);
                 }
@@ -219,7 +221,7 @@
             el.contents().filter(function () { return this.nodeType == 8; }).remove(); // remove comments
 
             // Cleanup li items
-            $('li', el).each(function(){
+            $('li', el).each(function () {
                 $(this).html($.trim($(this).html()));
             });
 
@@ -267,12 +269,12 @@
             });
 
             // Remove repeated tags like: <b>H</b><b>ello</b>
-            $('b, i, u, ol, ul', el).filter(function(){ return this.nextSibling && this.tagName === this.nextSibling.tagName; }).each(function(){
+            $('b, i, u, ol, ul', el).filter(function () { return this.nextSibling && this.tagName === this.nextSibling.tagName; }).each(function () {
                 $(this.nextSibling).prepend($(this).contents());
                 $(this).remove();
             });
 
-            $(el).contents().filter(function() { return this.nodeType === 1 && -1 === jQuery.inArray(this.tagName.toLowerCase(), ['p', 'div', 'ul', 'ol', 'table', 'li']); }).wrap('<p />'); // wrap non block tags into paragraphs
+            $(el).contents().filter(function () { return this.nodeType === 1 && -1 === jQuery.inArray(this.tagName.toLowerCase(), ['p', 'div', 'ul', 'ol', 'table', 'li']); }).wrap('<p />'); // wrap non block tags into paragraphs
 
             jQuery('*:not(b, i, u, ol, ul, li, p, br)', el).remove(); // remove not allowed tags
 
@@ -288,7 +290,7 @@
             });
 
             // Trim tag contents
-            $('*', el).each(function(){
+            $('*', el).each(function () {
                 $(this).html($.trim($(this).html()));
             });
 
@@ -296,6 +298,7 @@
 
             //html = html.replace(/<\/(b|i|u|ol|ul)>\s*<\1>/gi, ''); // Remove repeated tags like: <b>H</b><b>ello</b>
             html = html.replace(/>\s+</g, '><'); // IE 8 fix, he had added some strange symbols not \r\n and not \n
+
             return html;
         },
         setHtml: function (html) {
