@@ -201,6 +201,8 @@ test('should convert list paragraphs', function() {
     check('<p>1. one</p>', '<ol><li>one</li></ol>');
     check('<p>1. one</p><p>2. two</p>', '<ol><li>one</li><li>two</li></ol>');
     check('<p><b>title</b></p><p>1. one</p><p>2. two</p>', '<p><b>title</b></p><ol><li>one</li><li>two</li></ol>');
+    check('<p class="MsoNormal" style="margin-bottom:0cm;margin-bottom:.0001pt;line-height:normal"><span lang="UK">- hello;<o:p></o:p></span></p><p class="MsoNormal" style="margin-bottom:0cm;margin-bottom:.0001pt;line-height:normal"><span lang="UK">- world;<o:p></o:p></span></p>',
+    	'<ul><li>hello;</li><li>world;</li></ul>');
 });
 
 module('Html other');
@@ -396,7 +398,7 @@ test('real world tests', function () {
         '<ul><li>уверенный пользователь ПК, знание1С (Кадры. Предприятие), отличное знание Excel;</li></ul>');
 
     check('<p class="MsoNormal" style="margin-bottom:0cm;margin-bottom:.0001pt;line-height:normal"><span lang="UK">- item;<o:p></o:p></span></p><p class="MsoNormal" style="margin-bottom:0cm;margin-bottom:.0001pt;line-height:normal"><span lang="UK">- item;<o:p></o:p></span></p><p class="MsoNormal" style="margin-bottom:0cm;margin-bottom:.0001pt;line-height:normal"><span lang="UK">- item;<o:p></o:p></span></p>',
-        '<p>- item;</p><p>- item;</p><p>- item;</p>');
+        '<ul><li>item;</li><li>item;</li><li>item;</li></ul>');
 
 });
 
@@ -414,6 +416,7 @@ test('should strip spaces', function(){
     check('<p> &nbsp;&nbsp; </p>', '<p>&nbsp;</p>');
     check('<p> <strong>&nbsp;&nbsp;</strong> </p>', '<p><b>&nbsp;</b></p>');
 });
+
 
 /* TEST CASE EXAMPLE
 test('<TEST CASE TITLE>', function () {

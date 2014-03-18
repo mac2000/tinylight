@@ -148,12 +148,12 @@
             // Word 2003 UL list in IE8 <p>ohello</p>
             list_items = $('p, div', el).filter(function () {
                 var text = $.trim($(this).text());
-                return text.match(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/) || escape(text).match(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/);
+                return text.match(/^(\- |&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/) || escape(text).match(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/);
             });
             $.each(list_items, function () {
                 $(this).find('span').contents().unwrap();
                 var text = $.trim($(this).html());
-                text = text.replace(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/i, '');
+                text = text.replace(/^(\- |&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/i, '');
                 text = unescape(escape(text).replace(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/i, ''));
 
                 $(this).replaceWith('<ul><li>' + text + '</li></ul>');
