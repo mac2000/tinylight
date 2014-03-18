@@ -356,7 +356,7 @@ test('should unwrap divs with only one div or paragraph child', function(){
 });
 
 test('should unwrap tables', function () {
-    /*check('<table class="table"><tr><td>key</td><td>val</td></tr><tr><td>1</td><td>one</td></tr></table>',
+    check('<table class="table"><tr><td>key</td><td>val</td></tr><tr><td>1</td><td>one</td></tr></table>',
         '<p>key</p><p>&nbsp;</p><p>val</p><p>&nbsp;</p><p>1</p><p>&nbsp;</p><p>one</p><p>&nbsp;</p>');
 
     check('<table class="table"><tr><td><p>hello</p></td></tr></table>',
@@ -364,12 +364,15 @@ test('should unwrap tables', function () {
 
     check('<table class="table"><tr><td><b>hello</b></td></tr></table>',
         '<p><b>hello</b></p><p>&nbsp;</p>');
-*/
+
     check('<div><table><tbody><tr><td><div><div><div><div><div><div><p><strong>hello</strong></p></div></div></div></div></div></div></td></tr></tbody></table></div>',
-    	'hello');
+    	'<p><b>hello</b></p><p>&nbsp;</p>');
 
     check('<div><table><tbody><tr><td><div><div><div><div><div><div><p><strong>hello</strong></p><p>world</p></div></div></div></div></div></div></td></tr></tbody></table></div>',
-    	'hello');
+    	'<p><b>hello</b></p><p>world</p><p>&nbsp;</p>');
+
+    check('<div><table><tbody><tr><td><div><div><div><div><div><div><p><strong>hello</strong></p><p>world</p><p>lorem</p></div></div></div><p>&nbsp;</p></div></div></div></td></tr></tbody></table></div>',
+    	'<p><b>hello</b></p><p>world</p><p>lorem</p><p>&nbsp;</p><p>&nbsp;</p>');
 });
 
 test('real world tests', function () {

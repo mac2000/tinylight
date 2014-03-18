@@ -88,17 +88,8 @@
             el.find('br').filter(function () { return !this.parentNode || this.parentNode.nodeName.toLowerCase() !== 'li'; }).remove(); // remove all <br> except thous who in <li>
             $('*').filter(function () { return this.nodeType === 3 && /\s+/.test(this.nodeValue); }).remove(); // remove empty text nodes
 
-            el.contents().filter(function () { return this.nodeType === 3 && /\S+/.test(this.nodeValue); }).wrap('<p />'); // wrap text nodes in paragraphs
 
-            el.find('div').each(function(){
-                if($(this).children('p, div').size() == 1 && $(this).children('*').size() == 1) {
-                    $(this).contents().unwrap();
-                }
-            });
 
-            $('div, blockquote', el).each(function () {
-                $(this).replaceWith('<p>' + $(this).html() + '</p>');
-            });
 
             // Word lists
             list_items = $('p', el).filter(function (index, item) {
@@ -155,7 +146,7 @@
             });
 
             // Word 2003 UL list in IE8 <p>ohello</p>
-            list_items = $('p', el).filter(function () {
+            list_items = $('p, div', el).filter(function () {
                 var text = $.trim($(this).text());
                 return text.match(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/) || escape(text).match(/^(&bull;|&#8226;|&#x2022;|%u2022|%u8226|%uF02D)/);
             });
@@ -225,6 +216,13 @@
                 $(this).html($.trim($(this).html()));
             });
 
+
+            // Deal with divs after lists
+            el.find('div > div').each(function(){ // unwrap divs that contain other divs or paragraphs only
+                if($(this).siblings().size() == 0 || ($(this).children('*').size() == $(this).children('p, div').size()) ) $(this).contents().unwrap();
+            });
+            $('div', el).contents().unwrap();
+            el.contents().filter(function () { return this.nodeType === 3 && /\S+/.test(this.nodeValue); }).wrap('<p />'); // wrap text nodes in paragraphs
 
             // Replace long tags to short
             $('strong', el).replaceWith(function () {
@@ -365,7 +363,7 @@
                 $.each(self.buttons, function (index, button) {
                     var command = button.data('command'),
                         enabled = self.doc.queryCommandEnabled(command),
-                        state = false;//self.doc.queryCommandState(command);
+                        state = self.doc.queryCommandState(command);
                     button.toggleClass('mac-tinylight-toolbar-button__active', state);
                     button.toggleClass('mac-tinylight-toolbar-button__disabled', !enabled);
 
