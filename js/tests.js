@@ -203,6 +203,8 @@ test('should convert list paragraphs', function() {
     check('<p><b>title</b></p><p>1. one</p><p>2. two</p>', '<p><b>title</b></p><ol><li>one</li><li>two</li></ol>');
     check('<p class="MsoNormal" style="margin-bottom:0cm;margin-bottom:.0001pt;line-height:normal"><span lang="UK">- hello;<o:p></o:p></span></p><p class="MsoNormal" style="margin-bottom:0cm;margin-bottom:.0001pt;line-height:normal"><span lang="UK">- world;<o:p></o:p></span></p>',
     	'<ul><li>hello;</li><li>world;</li></ul>');
+    check('<font color="#000000" face="Times New Roman" size="3"></font><p style="margin: 0cm 0cm 0pt; line-height: normal;"><span lang="UK"><font color="#000000" face="Calibri" size="3">- item;</font></span></p><font color="#000000" face="Times New Roman" size="3"></font><p style="margin: 0cm 0cm 0pt; line-height: normal;"><span lang="UK"><font color="#000000" face="Calibri" size="3">- item;</font></span></p><font color="#000000" face="Times New Roman" size="3"></font>',
+        '<ul><li>item;</li><li>item;</li></ul>');
 });
 
 module('Html other');
@@ -319,6 +321,16 @@ test('combine repeated tags', function () {
 
     check('<ol><li>1</li></ol><ol><li>2</li></ol>', '<ol><li>1</li><li>2</li></ol>');
     check('<ol><li>1</li></ol><ol><li>2</li></ol><ol><li>3</li></ol>', '<ol><li>1</li><li>2</li><li>3</li></ol>');
+});
+
+test('should combine lists separated by empty paragraph', function(){
+    check('<ul><li>1</li></ul><p>&nbsp;</p><ul><li>2</li></ul>', '<ul><li>1</li><li>2</li></ul>');
+});
+
+test('should remove empty font tags', function(){
+    check('<font></font>', '');
+    check('<font face="Arial"></font>', '');
+    check('<font face="Arial" size="7"></font>', '');
 });
 
 test('fill empty and with br paragraphs and divs with non break space', function() {

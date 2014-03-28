@@ -216,7 +216,6 @@
                 $(this).html($.trim($(this).html()));
             });
 
-
             // Deal with divs after lists
             el.find('div > div').each(function(){ // unwrap divs that contain other divs or paragraphs only
                 if($(this).siblings().size() == 0 || ($(this).children('*').size() == $(this).children('p, div').size()) ) $(this).contents().unwrap();
@@ -265,6 +264,19 @@
             $('div', el).replaceWith(function () {
                 return '<p>' + $(this).html() + '</p>';
             });
+
+            // Remove empty paragrahp separators between lists
+            $('p', el).filter(function(){
+                if(this.innerHTML == '&nbsp;' && this.nextSibling && this.previousSibling) {
+                    if('ul' == this.nextSibling.tagName.toLowerCase() && 'ul' == this.previousSibling.tagName.toLowerCase()) {
+                        return true;
+                    }
+                    else if('ol' == this.nextSibling.tagName.toLowerCase() && 'ol' == this.previousSibling.tagName.toLowerCase()) {
+                        return true;
+                    }
+                }
+                return false;
+            }).remove();
 
             // Remove repeated tags like: <b>H</b><b>ello</b>
             $('b, i, u, ol, ul', el).filter(function () { return this.nextSibling && this.tagName === this.nextSibling.tagName; }).each(function () {
