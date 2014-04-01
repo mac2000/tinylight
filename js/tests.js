@@ -276,6 +276,18 @@ test('will wrap b, i, u with paragraph', function () {
     check('<b><i>hello</i></b>', '<p><b><i>hello</i></b></p>');
 });
 
+test('will remove b, i, u within empty paragraphs', function(){
+    check('<p><b>&nbsp;</b></p>', '<p>&nbsp;</p>');
+    check('<p><i>&nbsp;</i></p>', '<p>&nbsp;</p>');
+    check('<p><u>&nbsp;</u></p>', '<p>&nbsp;</p>');
+    check('<p><b><u>&nbsp;</u></b></p>', '<p>&nbsp;</p>');
+    check('<p><b><i>&nbsp;</i></b></p>', '<p>&nbsp;</p>');
+    check('<p><i><u>&nbsp;</u></i></p>', '<p>&nbsp;</p>');
+    check('<p><i><b>&nbsp;</b></i></p>', '<p>&nbsp;</p>');
+    check('<p><u><i>&nbsp;</i></u></p>', '<p>&nbsp;</p>');
+    check('<p><u><b>&nbsp;</b></u></p>', '<p>&nbsp;</p>');
+});
+
 test('will not nest duplicate tags', function () {
     check('<b><span style="font-weight:bold">span</span></b>', '<p><b>span</b></p>');
     check('<i><span style="font-style:italic">span</span></i>', '<p><i>span</i></p>');
@@ -426,7 +438,7 @@ test('should strip spaces', function(){
     check('<p> &nbsp;</p>', '<p>&nbsp;</p>');
     check('<p> &nbsp; </p>', '<p>&nbsp;</p>');
     check('<p> &nbsp;&nbsp; </p>', '<p>&nbsp;</p>');
-    check('<p> <strong>&nbsp;&nbsp;</strong> </p>', '<p><b>&nbsp;</b></p>');
+    check('<p> <strong>&nbsp;&nbsp;</strong> </p>', '<p>&nbsp;</p>');
 });
 
 

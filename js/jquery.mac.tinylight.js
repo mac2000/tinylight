@@ -304,6 +304,11 @@
                 $(this).html($.trim($(this).html()));
             });
 
+            // Unwrap empty b, i, u
+            $('b, i, u', el).filter(function () {
+                return $.trim($(this).text()).length === 0;
+            }).contents().unwrap();
+
             html = el.html();
 
             //html = html.replace(/<\/(b|i|u|ol|ul)>\s*<\1>/gi, ''); // Remove repeated tags like: <b>H</b><b>ello</b>
