@@ -267,7 +267,7 @@
 
             // Remove empty paragrahp separators between lists
             $('p', el).filter(function(){
-                if(this.innerHTML == '&nbsp;' && this.nextSibling && this.previousSibling) {
+                if(this.innerHTML == '&nbsp;' && this.nextSibling && this.previousSibling && typeof this.nextSibling.tagName !== 'undefined' && typeof this.previousSibling.tagName !== 'undefined') {
                     if('ul' == this.nextSibling.tagName.toLowerCase() && 'ul' == this.previousSibling.tagName.toLowerCase()) {
                         return true;
                     }
@@ -308,6 +308,16 @@
             $('b, i, u', el).filter(function () {
                 return $.trim($(this).text()).length === 0;
             }).contents().unwrap();
+
+            // Remove repeated new lines
+            //$('p:contains("\xa0") + p:contains("\xa0") + p:contains("\xa0")').remove();
+            /*$('p', el).filter(function(){
+                return $.trim($(this).html()) === '&nbsp;'
+                    && $(this).siblings('p').filter(function(){
+                        return $.trim($(this).html()) === '&nbsp;';
+                    }).size() > 1;
+            }).remove();*/
+            $('p', el).filter(function(){ return $.trim($(this).html()) === '&nbsp;' && $(this).prev('p').filter(function(){ return $.trim($(this).html()) === '&nbsp;'; }).size() === 1 && $(this).next('p').filter(function(){ return $.trim($(this).html()) === '&nbsp;'; }).size() === 1; }).remove();
 
             html = el.html();
 

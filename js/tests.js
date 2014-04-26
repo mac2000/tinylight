@@ -441,6 +441,13 @@ test('should strip spaces', function(){
     check('<p> <strong>&nbsp;&nbsp;</strong> </p>', '<p>&nbsp;</p>');
 });
 
+test('should strip repeated newlines', function () {
+    check('<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>', '<p>&nbsp;</p><p>&nbsp;</p>');
+    check('<p>&nbsp;</p>', '<p>&nbsp;</p>');
+    check('<p>&nbsp;</p><p>hello</p><p>&nbsp;</p>', '<p>&nbsp;</p><p>hello</p><p>&nbsp;</p>');
+    check('<p>&nbsp;</p><p>hello</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>world</p><p>&nbsp;</p>', '<p>&nbsp;</p><p>hello</p><p>&nbsp;</p><p>&nbsp;</p><p>world</p><p>&nbsp;</p>');
+});
+
 
 /* TEST CASE EXAMPLE
 test('<TEST CASE TITLE>', function () {
