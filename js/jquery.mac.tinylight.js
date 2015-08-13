@@ -35,6 +35,13 @@
             html = html.replace(/<(div|p)><(ul|ol)>/gi, '<$2>').replace(/<\/(ul|ol)><\/(div|p)>/gi, '</$1>'); // lists can not be nested
             html = html.replace(/(&nbsp;)+/gi, '&nbsp;'); // strip white spaces
 
+            // If all content wrapped into only one list item and there is lists inside it - unwrap
+            //html = $.trim(html);
+            //if(/^<(u|ol)l>\s*<li>.*<(u|o)l>.*<\/li>\s*<\/\1l>$/gi.test(html)) {
+            //    html = html.replace(/^<(u|ol)l>\s*<li>(.*)<\/li>\s*<\/\1l>$/gi, '$2');
+            //}
+
+
             el = $('<div>').html(html);
             el.find('applet, area, audio, base, basefont, button, canvas, col, colgroup, command, datalist, embed, fieldset, form, frame, frameset, head, hr, iframe, img, input, keygen, link, map, meta, noframes, noscript, object, optgroup, option, param, progress, script, select, source, style, textarea, track, video, wbr').remove(); // remove unsupported tags
 
@@ -46,6 +53,56 @@
             $.each([/*'em', 'i', 'u',*/ 'a', 'abbr', 'acronym', 'address', 'article', 'aside', 'bdi', 'bdo', 'big', 'caption', 'center', 'cite', 'code', 'dd', 'del', 'details', 'dfn', 'dialog', 'dl', 'dt', 'figcaption', 'figure', 'font', 'footer', 'header', 'hgroup', 'ins', 'kbd', 'label', 'legend', 'mark', 'menu', 'meter', 'nav', 'output', 'pre', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'small', 'strike', 'sub', 'summary', 'sup', 'tfoot', 'time', 'title', 'tt', 'var'], function (index, tag) {
                 $(tag, el).contents().unwrap();
             });
+
+
+            var doesTextContainsOnlyTextNodesAndParagraphs = JSON.stringify(el.contents().map(function(index, item) {
+                if(item.nodeType === 3) {
+                    return 'T';
+                }
+                else if(item.nodeType === 1) {
+                    if(item.nodeName.toLowerCase() === 'p') return 'P';
+                    else return 'O';
+                }
+            }).get().reduce(function(carry, item){
+                if(carry.indexOf(item) === -1) {
+                    carry.push(item);
+                }
+                return carry;
+            }, [])) === JSON.stringify(['T', 'P']);
+
+            if(doesTextContainsOnlyTextNodesAndParagraphs) {
+                el.contents().filter(function(index, item){ return item.nodeType === 3; }).wrap('<p />');
+            }
+
+            var doesTextContainsOnlyListItemsAndEmptyParagraphs = JSON.stringify(el.contents().map(function(index, item){
+                var txt = $.trim($(item).text()).replace('&nbsp;', '');
+                if(txt.match(/^[-0-9]\.?[ a-zа-я]/gi)) return 'LI';
+                else if(txt.length === 0) return 'EMPTY';
+
+                return 'OTHER';
+            }).get().reduce(function(carry, item){
+                if(carry.indexOf(item) === -1) {
+                    carry.push(item);
+                }
+                return carry;
+            }, []).sort()) === JSON.stringify(['EMPTY', 'LI']);
+
+            if(doesTextContainsOnlyListItemsAndEmptyParagraphs) {
+                el.find('p').filter(function(index, item){
+                    return $.trim($(item).text()).replace('&nbsp;', '').length === 0;
+                }).remove();
+
+                var listType = el.find('p').map(function(index, item){
+                    return $.trim($(item).text()).match(/^[0-9]+/gi);
+                }).length > 0 ? 'ol' : 'ul';
+
+                el.find('p').each(function(index, item){
+                    $(item).replaceWith('<li>' + $.trim($(item).html().replace(/^[-0-9]+\.? ?/gi, '')) + '</li>');
+                });
+
+                el.contents().wrapAll('<' + listType + ' />');
+
+            }
 
             // Wrap all non block nodes into paragrahps
             do {
@@ -65,6 +122,7 @@
                     jQuery(wrapMe).wrapAll('<p />');
                 }
             } while (firstNonBlockElement && firstNonBlockElement.nodeName.toLowerCase() !== 'p'); // repeat until there is some non wrapped elements
+
 
             // split pagargraph line breaks into separate paragraphs
             el.find('p > br').map(function () { return this.parentNode }).each(function () {
@@ -163,7 +221,8 @@
             list_items = $('li', el).filter(function (index, item) { return $(item).find('ul, ol').size() > 0; });
             list_items.each(function (index, item) {
                 var list = $(item).find('ul:first, ol:first');
-                $(list.html()).insertAfter(item);
+                //$(list.html()).insertAfter(item);
+                $(item).parent().append(list.html());
                 list.remove();
             });
             $('ul, ol', el).each(function (index, item) {

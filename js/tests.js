@@ -448,6 +448,17 @@ test('should strip repeated newlines', function () {
     check('<p>&nbsp;</p><p>hello</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>world</p><p>&nbsp;</p>', '<p>&nbsp;</p><p>hello</p><p>&nbsp;</p><p>&nbsp;</p><p>world</p><p>&nbsp;</p>');
 });
 
+test('unwrap if all content is single list item', function () {
+    check('<ul><li><ul><li>item</li></ul></li></ul>', '<ul><li>item</li></ul>');
+});
+
+test('buggy wrapped text should be fixed', function () {
+    check('- item<p> </p>-item<p> </p>', '<ul><li>item</li><li>item</li></ul>');
+    check('1. item<p> </p>2.item<p> </p>', '<ol><li>item</li><li>item</li></ol>');
+});
+
+//- item<p> </p>-item<p> </p>
+
 
 /* TEST CASE EXAMPLE
 test('<TEST CASE TITLE>', function () {
