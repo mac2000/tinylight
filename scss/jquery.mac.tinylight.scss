@@ -22,7 +22,7 @@ $buttons-margin:1px;
     @include clearfix;
     @include user-select(none);
 
-    @each $button in 'Bold', 'Italic', 'Underline', 'InsertUnorderedList', 'InsertOrderedList', 'Undo', 'Redo' {
+    @each $button in 'Bold', 'Italic', 'Underline', 'InsertUnorderedList', 'InsertOrderedList', 'Undo', 'Redo', 'CaseSwitcher' {
       @if $max-button-height < image-height("#{$button}.png") {
         $max-button-height: image-height("#{$button}.png");
       }

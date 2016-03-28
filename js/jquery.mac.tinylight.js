@@ -433,12 +433,58 @@
             button = $('<span class="mac-tinylight-toolbar-button" data-command="' + command + '" unselectable="on">' + command + '</span>').appendTo(self.toolbar);
             button.on('mousedown', function (e) { // must be mousedown, not click, otherwise it will not work in Firefox, because before click, text in edit area is unselected
                 e.preventDefault();
-                var wrap_with_p = ((command === 'InsertUnorderedList' || command === 'InsertOrderedList') && self.doc.queryCommandState(command));
-                self.doc.execCommand(command, false, null);
-                if(wrap_with_p) {
-                    self.doc.execCommand('FormatBlock', false, self.options.blockTag); //wrap with <p>
+                if(command === 'CaseSwitcher') {
+                    //var node = self._selectedNode();
+                    //console.log('going to switch case', node, node.innerHTML);
+
+                    //stackoverflow.com/a/1563492
+                    var range, sel, container, node;
+                    if (self.doc.selection && self.doc.selection.createRange) {
+                        node = self.doc.selection.createRange().parentElement();
+                    } else if (self.wnd.getSelection) {
+                        sel = self.wnd.getSelection();
+                        if (sel.getRangeAt) {
+                            if (sel.rangeCount > 0) {
+                                range = sel.getRangeAt(0);
+                            }
+                        } else {
+                            // Old WebKit selection object has no getRangeAt, so
+                            // create a range from other selection properties
+                            range = self.doc.createRange();
+                            range.setStart(sel.anchorNode, sel.anchorOffset);
+                            range.setEnd(sel.focusNode, sel.focusOffset);
+
+                            // Handle the case when the selection was selected backwards (from the end to the start in the document)
+                            if (range.collapsed !== sel.isCollapsed) {
+                                range.setStart(sel.focusNode, sel.focusOffset);
+                                range.setEnd(sel.anchorNode, sel.anchorOffset);
+                            }
+                        }
+
+                        if (range) {
+                           container = range.commonAncestorContainer;
+
+                           // Check if the container is a text node and return its parent if so
+                           node = container.nodeType === 3 ? container.parentNode : container;
+                        }
+                    }
+
+                    console.log('going to switch case', node);
+                    if(node.tagName.toLowerCase() !== 'body') {
+                        var shouldBeUpperCased = $(node).text().match(/[a-zа-я]/g);
+                        var oldHtml = node.innerHTML.replace('&nbsp;', ' ');
+                        node.innerHTML = shouldBeUpperCased ? oldHtml.toUpperCase() : oldHtml.toLowerCase();
+                    }
+
+                } else {
+                    var wrap_with_p = ((command === 'InsertUnorderedList' || command === 'InsertOrderedList') && self.doc.queryCommandState(command));
+                    self.doc.execCommand(command, false, null);
+                    if(wrap_with_p) {
+                        self.doc.execCommand('FormatBlock', false, self.options.blockTag); //wrap with <p>
+                    }
                 }
                 self._updateToolbar();
+
                 return false;
             });
             self.buttons.push(button);
@@ -463,7 +509,7 @@
         },
         _create: function () {
             var self = this,
-                buttons = ['Bold', 'Italic', 'Underline', 'InsertUnorderedList', 'InsertOrderedList'];
+                buttons = ['Bold', 'Italic', 'Underline', 'CaseSwitcher', 'InsertUnorderedList', 'InsertOrderedList'];
             // Hide textarea
             self.element.hide();
 
