@@ -493,16 +493,19 @@
             var self = this;
             if (self.buttons.length > 0) {
                 $.each(self.buttons, function (index, button) {
-                    var command = button.data('command'),
-                        enabled = self.doc.queryCommandEnabled(command),
-                        state = self.doc.queryCommandState(command);
-                    button.toggleClass('mac-tinylight-toolbar-button__active', state);
-                    button.toggleClass('mac-tinylight-toolbar-button__disabled', !enabled);
+                    var command = button.data('command');
 
-                    if (enabled) {
-                        button.removeAttr('disabled');
-                    } else {
-                        button.attr('disabled', 'disabled');
+                    if(command !== 'CaseSwitcher') {
+                        var enabled = self.doc.queryCommandEnabled(command),
+                            state = self.doc.queryCommandState(command);
+                        button.toggleClass('mac-tinylight-toolbar-button__active', state);
+                        button.toggleClass('mac-tinylight-toolbar-button__disabled', !enabled);
+
+                        if (enabled) {
+                            button.removeAttr('disabled');
+                        } else {
+                            button.attr('disabled', 'disabled');
+                        }
                     }
                 });
             }
