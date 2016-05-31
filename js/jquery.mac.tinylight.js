@@ -634,6 +634,9 @@
 
                 if (self.options.updateOnKeyUp) {
                     self.element.val(self.doc.body.innerHTML);
+                    if(typeof self.options.updateOnKeyUp === 'function') {
+                        self.options.updateOnKeyUp(self.doc.body.innerHTML, self);
+                    }
                 }
             });
 
