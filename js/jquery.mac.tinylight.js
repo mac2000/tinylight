@@ -484,7 +484,10 @@
                     }
                 }
                 self._updateToolbar();
-
+                self.setHtml(self.cleanupHtml(self.getHtml()));
+                if (typeof self.options.updateOnKeyUp === 'function') {
+                    self.options.updateOnKeyUp(self.doc.body.innerHTML, self);
+                }
                 return false;
             });
             self.buttons.push(button);
