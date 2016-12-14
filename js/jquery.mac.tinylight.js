@@ -378,6 +378,25 @@
             }).remove();*/
             $('p', el).filter(function(){ return $.trim($(this).html()) === '&nbsp;' && $(this).prev('p').filter(function(){ return $.trim($(this).html()) === '&nbsp;'; }).size() === 1 && $(this).next('p').filter(function(){ return $.trim($(this).html()) === '&nbsp;'; }).size() === 1; }).remove();
 
+            // Remove empty paragraphs from beginning
+            //while ($('*:empty:not(br)', el).size() > 0) {
+            //    $('*:empty:not(br)', el).remove(); // remove empty non <br> nodes
+            //}
+
+            while (el.contents().length > 1 && $('p', el).filter(function () { return $.trim($(this).html()) === '&nbsp;' && $(this).prev('*').size() === 0; }).size() > 0) {
+                $('p', el).filter(function () { return $.trim($(this).html()) === '&nbsp;' && $(this).prev('*').size() === 0; }).remove();
+            }
+
+            // var emptyParagraphsAtBegginingToRemove = []
+            // for(var i = 0; i < el.contents().length; i++) {
+            //     var item = el.contents().get(i)
+            //     if (item.tagName.toLowerCase() !== 'p') break;
+            //     if (item.innerHTML.trim() === '&nbsp;') {
+            //         el.remove(item)
+            //         //emptyParagraphsAtBegginingToRemove.push(item)
+            //     }
+            // }
+
             html = el.html();
 
             //html = html.replace(/<\/(b|i|u|ol|ul)>\s*<\1>/gi, ''); // Remove repeated tags like: <b>H</b><b>ello</b>

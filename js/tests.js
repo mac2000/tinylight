@@ -442,10 +442,10 @@ test('should strip spaces', function(){
 });
 
 test('should strip repeated newlines', function () {
-    check('<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>', '<p>&nbsp;</p><p>&nbsp;</p>');
+    check('<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>', '<p>&nbsp;</p>');
     check('<p>&nbsp;</p>', '<p>&nbsp;</p>');
-    check('<p>&nbsp;</p><p>hello</p><p>&nbsp;</p>', '<p>&nbsp;</p><p>hello</p><p>&nbsp;</p>');
-    check('<p>&nbsp;</p><p>hello</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>world</p><p>&nbsp;</p>', '<p>&nbsp;</p><p>hello</p><p>&nbsp;</p><p>&nbsp;</p><p>world</p><p>&nbsp;</p>');
+    check('<p>&nbsp;</p><p>hello</p><p>&nbsp;</p>', '<p>hello</p><p>&nbsp;</p>');
+    check('<p>&nbsp;</p><p>hello</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>world</p><p>&nbsp;</p>', '<p>hello</p><p>&nbsp;</p><p>&nbsp;</p><p>world</p><p>&nbsp;</p>');
 });
 
 test('unwrap if all content is single list item', function () {
@@ -455,6 +455,14 @@ test('unwrap if all content is single list item', function () {
 test('buggy wrapped text should be fixed', function () {
     check('- item<p> </p>-item<p> </p>', '<ul><li>item</li><li>item</li></ul>');
     check('1. item<p> </p>2.item<p> </p>', '<ol><li>item</li><li>item</li></ol>');
+});
+
+test('remove empty paragraphs from beggining', function () {
+    check('<p></p><p>item</p>', '<p>item</p>');
+    check('<p></p><p></p><p>item</p>', '<p>item</p>');
+    check('<p>&nbsp;</p><p>item</p>', '<p>item</p>');
+    check('<p>&nbsp;</p><p>&nbsp;</p><p>item</p>', '<p>item</p>');
+    check('<p>&nbsp;</p><p>&nbsp;</p><p>item</p><p>&nbsp;</p><p>item</p>', '<p>item</p><p>&nbsp;</p><p>item</p>');
 });
 
 //- item<p> </p>-item<p> </p>
