@@ -261,8 +261,8 @@
 
             // Single li items
             $('li', el).filter(function(){
-                if(this.previousSibling && this.previousSibling.nodeType === 3) $(this.previousSibling).wrap('<p />');
-                if(this.nextSibling && this.nextSibling.nodeType === 3) $(this.nextSibling).wrap('<p />');
+                //if(this.previousSibling && this.previousSibling.nodeType === 3) $(this.previousSibling).wrap('<p />');
+                //if(this.nextSibling && this.nextSibling.nodeType === 3) $(this.nextSibling).wrap('<p />');
                 return this.parentNode && this.parentNode.nodeName.toLowerCase() !== 'ul' && this.parentNode.nodeName.toLowerCase() !== 'ol';
             }).wrap('<ul />');
 

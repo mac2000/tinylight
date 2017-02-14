@@ -465,6 +465,10 @@ test('remove empty paragraphs from beggining', function () {
     check('<p>&nbsp;</p><p>&nbsp;</p><p>item</p><p>&nbsp;</p><p>item</p>', '<p>item</p><p>&nbsp;</p><p>item</p>');
 });
 
+test('remove empty paragraphs between list items', function () {
+    check('<UL> <LI> item1 </LI> <LI> item2 </LI> <LI> item3</LI></UL>', '<ul><li>item1</li><li>item2</li><li>item3</li></ul>');
+});
+
 //- item<p> </p>-item<p> </p>
 
 
